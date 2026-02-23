@@ -1,0 +1,129 @@
+/* Issues Explorer Redesign Styles */
+
+.issues-explorer {
+    background-color: #ffffff;
+    min-height: calc(100vh - 84px);
+    padding: 32px;
+}
+
+.severity-btn {
+    text-transform: none !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    color: #64748b !important;
+    border-color: #f1f5f9 !important;
+    padding: 6px 16px !important;
+}
+
+.severity-btn.active {
+    background-color: #f8fafc !important;
+    color: #1e293b !important;
+    border-color: #e2e8f0 !important;
+}
+
+.severity-btn .count-badge {
+    background-color: #f1f5f9;
+    color: #64748b;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    margin-left: 8px;
+}
+
+.bulk-actions-bar {
+    background-color: #ffffff;
+    border-top: 1px solid #f1f5f9;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.issue-row {
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.2s;
+}
+
+.issue-row:hover {
+    background-color: #fcfdfe;
+}
+
+.severity-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.severity-pill.critical {
+    background-color: #fef2f2;
+    color: #ef4444;
+}
+
+.severity-pill.major {
+    background-color: #fffbeb;
+    color: #f59e0b;
+}
+
+.severity-pill.minor {
+    background-color: #f0f9ff;
+    color: #0ea5e9;
+}
+
+.line-badge {
+    background-color: #f8fafc;
+    color: #64748b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.file-path {
+    font-family: monospace;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.magic-wand-btn {
+    color: #6366f1 !important;
+    background-color: #eef2ff !important;
+    border-radius: 8px !important;
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.magic-wand-btn:hover {
+    background-color: #e0e7ff !important;
+}
+
+.pagination-container {
+    padding: 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auto-fix-btn {
+    background-color: #2563eb !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    text-transform: none !important;
+    font-weight: 600 !important;
+    padding: 8px 20px !important;
+}
+
+.search-input-box {
+    background-color: #f8fafc;
+    border-radius: 10px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 360px;
+}

@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+    background-size: 100% 100%;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Add a subtle overlay to soften the dark gradient if needed, or keep it dark/modern */
+.login-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    /* Makes it light again but with depth */
+    z-index: 0;
+}
+
+.login-content-wrapper {
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+}
+
+.login-logo-box {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 16px -4px rgba(0, 102, 255, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.login-logo-box:hover {
+    transform: translateY(-2px);
+}
+
+.login-card {
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 20px 25px -5px rgba(0, 0, 0, 0.05),
+        0 0 0 1px rgba(0, 0, 0, 0.02) !important;
+    backdrop-filter: blur(10px);
+}
+
+.login-title {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #111827;
+    letter-spacing: -0.025em;
+}
+
+.login-subtitle {
+    color: #6b7280 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+}
+
+.login-input fieldset {
+    border-color: #e5e7eb;
+    transition: border-color 0.2s ease;
+    border-radius: 10px;
+}
+
+.login-input:hover fieldset {
+    border-color: #d1d5db;
+}
+
+.login-input.Mui-focused fieldset {
+    border-color: #0066ff;
+    border-width: 2px;
+}
+
+.login-input input {
+    color: #111827;
+    font-weight: 500;
+    padding: 14px 14px !important;
+    /* Slightly taller inputs */
+}
+
+/* Autofill override */
+.login-input input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #f9fafb inset;
+    -webkit-text-fill-color: #111827;
+    caret-color: #111827;
+    border-radius: inherit;
+}
+
+/* Hide default password toggle in Edge/IE and some versions of Chrome */
+.login-input input::-ms-reveal,
+.login-input input::-ms-clear {
+    display: none;
+}
+
+.login-button {
+    background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%) !important;
+    padding: 12px 0 !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.01em !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 102, 255, 0.2) !important;
+    transition: all 0.2s ease !important;
+    text-transform: none !important;
+}
+
+.login-button:hover {
+    background: linear-gradient(135deg, #0052cc 0%, #0040a0 100%) !important;
+    box-shadow: 0 6px 10px -2px rgba(0, 102, 255, 0.3) !important;
+    transform: translateY(-1px);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
