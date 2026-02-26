@@ -1,195 +1,212 @@
+/* ================= BACKGROUND ================= */
 .upload-container {
-    padding: 24px;
-    background-color: #ffffff;
-    min-height: calc(100vh - 64px);
-    display: flex;
-    flex-direction: column;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 20% 20%, #eef2ff, transparent 40%),
+              radial-gradient(circle at 80% 70%, #e0e7ff, transparent 45%),
+              linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-.upload-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
+/* Soft floating glow blobs */
+.upload-container::before,
+.upload-container::after {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(99,102,241,0.18), transparent 70%);
+  filter: blur(40px);
+  z-index: 0;
 }
 
-.breadcrumb {
-    font-size: 0.875rem;
-    font-weight: 500;
+.upload-container::before {
+  top: -120px;
+  left: -100px;
 }
 
-.header-icon {
-    color: #64748b;
-    position: relative;
-    padding: 8px;
+.upload-container::after {
+  bottom: -120px;
+  right: -100px;
 }
 
-.notification-dot {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 6px;
-    height: 6px;
-    background-color: #ef4444;
-    border-radius: 50%;
-    border: 1.5px solid white;
-}
-
+/* ================= MAIN ================= */
 .upload-main {
-    max-width: 640px;
-    margin: 0 auto;
-    width: 100%;
+  width: 100%;
+  max-width: 760px;
+  position: relative;
+  z-index: 1;
 }
 
+/* ================= TITLE ================= */
 .page-title {
-    font-size: 1.875rem !important;
-    font-weight: 700 !important;
-    color: #0f172a;
-    text-align: center;
-    margin-bottom: 12px !important;
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+  color: #0f172a;
+  letter-spacing: -0.3px;
 }
 
 .page-subtitle {
-    color: #64748b;
-    text-align: center;
-    margin-bottom: 40px !important;
+  color: #64748b;
+  margin-bottom: 28px !important;
 }
 
+/* ================= GLASS CARD ================= */
 .upload-card {
-    border-radius: 16px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-    border: 1px solid #e2e8f0 !important;
+  border-radius: 18px !important;
+  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+.upload-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 35px 70px rgba(15, 23, 42, 0.18);
+}
+
+/* ================= LABEL ================= */
 .section-label {
-    font-weight: 600 !important;
-    color: #1e293b;
-    margin-bottom: 12px !important;
-    display: block;
+  font-weight: 600 !important;
+  margin-bottom: 10px !important;
+  color: #334155;
 }
 
+/* ================= DROPZONE ================= */
 .dropzone {
-    border: 1px dashed #cbd5e1;
-    border-radius: 12px;
-    padding: 48px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fdfdfe;
-    margin-bottom: 32px;
-    transition: all 0.2s ease;
-    cursor: pointer;
+  border: 2px dashed #cbd5f5;
+  border-radius: 16px;
+  padding: 42px 20px;
+  text-align: center;
+  cursor: pointer;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
 }
 
 .dropzone:hover {
-    border-color: #2563eb;
-    background-color: #f8faff;
+  border-color: #6366f1;
+  background: #eef2ff;
 }
 
 .dropzone.drag-over {
-    border-color: #2563eb;
-    background-color: #eff6ff;
-    border-style: solid;
-    transform: scale(1.01);
+  border-color: #4f46e5;
+  background: #e0e7ff;
+  transform: scale(1.01);
 }
 
 .dropzone.has-file {
-    padding: 24px;
-    border-style: solid;
-    border-color: #e2e8f0;
-    cursor: default;
+  border-color: #2563eb;
+  background: #eff6ff;
 }
 
+/* subtle inner glow */
+.dropzone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(99,102,241,0.08), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.dropzone:hover::after {
+  opacity: 1;
+}
+
+/* ================= FILE CARD ================= */
 .selected-file-view {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ffffff, #f1f5f9);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
+  animation: fadeIn 0.25s ease;
 }
 
-.file-icon-wrapper {
-    width: 56px;
-    height: 56px;
-    background-color: #eff6ff;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.remove-file-btn {
-    color: #94a3b8 !important;
+/* ================= INPUT FIELDS ================= */
+.MuiTextField-root {
+  background: #ffffff;
+  border-radius: 12px;
 }
 
-.remove-file-btn:hover {
-    color: #ef4444 !important;
-    background-color: #fef2f2 !important;
+.MuiOutlinedInput-root {
+  border-radius: 12px !important;
+  transition: box-shadow 0.2s ease;
 }
 
-.upload-icon-wrapper {
-    width: 56px;
-    height: 56px;
-    background-color: #f5f3ff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
+.MuiOutlinedInput-root:hover {
+  box-shadow: 0 2px 8px rgba(99,102,241,0.12);
 }
 
-.select-files-btn {
-    text-transform: none !important;
-    font-weight: 600 !important;
-    border-radius: 8px !important;
-    padding: 6px 20px !important;
-    border-color: #e2e8f0 !important;
-    color: #1e293b !important;
+.MuiOutlinedInput-root.Mui-focused {
+  box-shadow: 0 4px 14px rgba(99,102,241,0.18);
 }
 
-.divider-wrapper {
-    margin: 32px 0;
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #4f46e5 !important;
+  border-width: 2px !important;
 }
 
-.custom-divider::before,
-.custom-divider::after {
-    border-color: #f1f5f9 !important;
+/* ================= DIVIDER ================= */
+.MuiDivider-root {
+  color: #94a3b8;
+  font-weight: 500;
+  margin: 24px 0;
 }
 
-.divider-text {
-    color: #94a3b8 !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.05em !important;
+/* ================= BUTTON ================= */
+.MuiButton-contained {
+  height: 50px !important;
+  border-radius: 14px !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  text-transform: none !important;
+  background: linear-gradient(90deg, #4f46e5, #6366f1) !important;
+  box-shadow: 0 10px 28px rgba(79, 70, 229, 0.28);
+  transition: all 0.25s ease;
 }
 
-.input-section {
-    margin-bottom: 32px;
+.MuiButton-contained:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, #4338ca, #4f46e5) !important;
+  box-shadow: 0 16px 34px rgba(79, 70, 229, 0.35);
 }
 
-.repo-input .MuiOutlinedInput-root {
-    background-color: white;
-    border-radius: 10px !important;
+.MuiButton-contained:active {
+  transform: translateY(0);
 }
 
-.repo-input .MuiOutlinedInput-notchedOutline {
-    border-color: #e2e8f0;
+.MuiButton-contained:disabled {
+  background: #94a3b8 !important;
+  box-shadow: none !important;
 }
 
-.input-helper {
-    color: #64748b;
-    margin-top: 8px !important;
-    display: block;
-}
+/* ================= RESPONSIVE ================= */
+@media (max-width: 600px) {
+  .upload-card {
+    border-radius: 14px !important;
+  }
 
-.start-analysis-btn {
-    background-color: #2563eb !important;
-    padding: 12px !important;
-    border-radius: 10px !important;
-    text-transform: none !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    box-shadow: none !important;
-}
-
-.start-analysis-btn:hover {
-    background-color: #1d4ed8 !important;
+  .dropzone {
+    padding: 30px 16px;
+  }
 }

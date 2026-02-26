@@ -12,7 +12,6 @@ import ScanStatus from './pages/ScanStatus';
 import DiffViewer from './pages/DiffViewer';
 import CodeViewer from './pages/CodeViewer';
 
-// Placeholder components for routes not yet implemented
 const Placeholder = ({ title }) => (
   <div style={{ padding: 20 }}>
     <h1>{title}</h1>
@@ -20,13 +19,11 @@ const Placeholder = ({ title }) => (
   </div>
 );
 
-// Auth wrapper component
 const RequireAuth = () => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   const location = useLocation();
 
   if (!isAuthenticated) {
-    // Redirect to login page but save the current location they were trying to go to
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
@@ -39,16 +36,21 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
+
           {/* Public Route */}
           <Route path="/" element={<Login />} />
 
           {/* Protected Routes */}
           <Route element={<RequireAuth />}>
             <Route element={<MainLayout />}>
+
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="issues" element={<Issues />} />
               <Route path="upload" element={<UploadProject />} />
-              <Route path="scan-status" element={<ScanStatus />} />
+
+              {/* 🔥 FIXED ROUTE HERE */}
+              <Route path="scan-status/:scanId" element={<ScanStatus />} />
+
               <Route path="rules" element={<Placeholder title="Rules" />} />
               <Route path="history" element={<Placeholder title="History" />} />
               <Route path="code-viewer" element={<CodeViewer />} />
@@ -61,11 +63,13 @@ function App() {
               <Route path="code-measures" element={<Placeholder title="Code Measures" />} />
               <Route path="team-access" element={<Placeholder title="Team Access" />} />
               <Route path="settings" element={<Placeholder title="Settings" />} />
+
             </Route>
           </Route>
 
-          {/* Fallback route - if authenticated go to dashboard, else login */}
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
+
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
