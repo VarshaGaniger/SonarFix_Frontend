@@ -1,0 +1,377 @@
+/* ================= BASE ================= */
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.layout {
+  display: flex;
+  width: 100%;
+  padding: 32px 24px;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  gap: 24px;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar {
+  width: 280px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  border: 1px solid #eef2f7;
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+  height: fit-content;
+}
+
+/* Filter Title */
+
+.filter-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Clear Button */
+
+.clear {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear:hover {
+  background: #fee2e2;
+}
+
+.clear:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Sections */
+
+.ruleopen{
+  margin-bottom: 20px;
+}
+
+.section-header {
+  padding: 14px 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.section-header:hover {
+  color: #0f172a;
+}
+
+.section + .section {
+  margin-top: 8px;
+}
+
+/* Chevron */
+
+.chevron {
+  display: flex;
+  transition: transform 0.25s ease;
+}
+
+.chevron.open {
+  transform: rotate(90deg);
+}
+
+/* Collapse */
+
+.collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.collapse.open {
+  max-height: 500px;
+}
+
+.collapse-inner {
+  margin-top: 14px;
+}
+
+/* Filter Rows */
+
+.row,
+.rule-item {
+  font-size: 13px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  color: #334155;
+}
+
+.row:last-child,
+.rule-item:last-child {
+  margin-bottom: 0;
+}
+
+.row:hover,
+.rule-item:hover {
+  background: #f8fafc;
+}
+
+.row.selected,
+.rule-item.selected {
+  background: linear-gradient(90deg, #eff6ff, #ffffff);
+  border: 1px solid #2563eb;
+  color: #1d4ed8;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+}
+
+.row span,
+.rule-item span {
+  background: #e2e8f0;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.row.selected span,
+.rule-item.selected span {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* Rule Search */
+
+.rule-search {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  font-size: 13px;
+  margin-bottom: 12px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.rule-search:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Rule List Scroll */
+
+.rule-list {
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.rule-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rule-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.rule-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ================= ISSUES ================= */
+
+.issues {
+  flex: 1;
+  position: relative;
+  min-height: 500px;
+}
+
+.file-group {
+  margin-bottom: 32px;
+}
+
+.file-path {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+/* Issue Card */
+
+.issue-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  transition: all 0.15s ease;
+}
+
+.issue-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.issue-card.selected {
+  border: 1px solid #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.issue-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.issue-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.issue-title:hover {
+  text-decoration: underline;
+}
+
+.badges-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.type-badge {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Severity */
+
+.severity-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.severity-badge.blocker { background: #7f1d1d; color: #fff; }
+.severity-badge.critical { background: #fee2e2; color: #b91c1c; }
+.severity-badge.major { background: #fef3c7; color: #92400e; }
+.severity-badge.minor { background: #dcfce7; color: #166534; }
+
+/* Right Side */
+
+.issue-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.right-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.right-badge:hover {
+  text-decoration: underline;
+}
+
+.mini-tag {
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.line-info {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ================= LOADER ================= */
+
+.overlay-loader {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.spinner {
+  width: 45px;
+  height: 45px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1100px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+}
