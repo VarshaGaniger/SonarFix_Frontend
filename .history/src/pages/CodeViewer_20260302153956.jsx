@@ -274,7 +274,6 @@ const CodeViewer = () => {
 
     return `${first}/../${lastFolder}/${fileName}`;
   };
-  
   const activeIssue = issues.find(i => i.id === activeIssueId);
 
   return (

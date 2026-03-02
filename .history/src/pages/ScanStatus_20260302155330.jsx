@@ -62,9 +62,9 @@ const ScanStatus = () => {
        clearInterval(intervalRef.current);
  
       setTimeout(() => {
-       navigate("/dashboard");
-     }, 1000); // optional 1s delay so user sees 100%
-   }
+      navigate("/dashboard");
+    }, 1000); // optional 1s delay so user sees 100%
+  }
 }
 
         // ================= FAILED =================

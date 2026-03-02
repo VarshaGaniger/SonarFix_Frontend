@@ -260,21 +260,7 @@ const CodeViewer = () => {
         document.exitFullscreen();
       }
     };
-
-      const maskFilePath = fullPath => {
-    if (!fullPath) return "";
-
-    const parts = fullPath.split("/");
-
-    if (parts.length <= 3) return fullPath;
-
-    const first = parts[0];
-    const lastFolder = parts[parts.length - 2];
-    const fileName = parts[parts.length - 1];
-
-    return `${first}/../${lastFolder}/${fileName}`;
-  };
-  
+    
   const activeIssue = issues.find(i => i.id === activeIssueId);
 
   return (

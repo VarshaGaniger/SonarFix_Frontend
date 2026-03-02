@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Issues.css";
-import axios from "axios";
+
 import {
   Box,
   Pagination,
@@ -98,6 +98,10 @@ const Issues = () => {
 
 }, [projectKey]);
 
+  if (projectKey) {
+    fetchProject();
+  }
+}, [projectKey]);
 
   /* ================= FETCH LOGIC ================= */
 
@@ -267,7 +271,7 @@ const Issues = () => {
         <Typography variant="body2" sx={{ color: "#64748b" }}>
           Manage and remediate code quality issues for{" "}
           <Chip
-            label={projectName}
+            label={projectName || projectKey}
             size="small"
             sx={{
               bgcolor: "#eff6ff",

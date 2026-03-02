@@ -258,7 +258,7 @@ const Dashboard = () => {
                                     <TableHead sx={{ bgcolor: '#f8fafc' }}>
                                         <TableRow>
                                             <TableCell sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>PROJECT KEY</TableCell>
-                                            <TableCell sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>PROJECT NAME</TableCell>
+                                            
                                             <TableCell sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>DESCRIPTION</TableCell>
                                             <TableCell align="right" sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>ACTION</TableCell>
                                         </TableRow>
@@ -270,7 +270,6 @@ const Dashboard = () => {
                                                     <TableCell component="th" scope="row" sx={{ fontWeight: 600, color: '#1e293b' }}>
                                                         {row.projectKey}
                                                     </TableCell>
-                                                    <TableCell sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>{row.name}</TableCell>
                                                     <TableCell sx={{ color: '#64748b' }}>
                                                         {row.description || "Spring Boot Project"}
                                                     </TableCell>

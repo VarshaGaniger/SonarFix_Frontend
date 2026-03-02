@@ -221,60 +221,7 @@ const CodeViewer = () => {
       console.error("Auto-fix all failed", err);
     }
   };
- /* ================= GROUP FILES ================= */
 
-  const files = [...new Set(issues.map(i => i.file))];
-
-  const getFileIssues = filePath =>
-    issues.filter(issue => issue.file === filePath);
-
-  const isFileFullySelected = filePath => {
-    const fileIssues = getFileIssues(filePath);
-    if (fileIssues.length === 0) return false;
-    return fileIssues.every(i => i.selected);
-  };
-
-  const handleCopy = async () => {
-      if (!fileContent?.lines) return;
-  
-      const fullText = fileContent.lines
-        .map(line =>
-          line.segments.map(segment => segment.text).join("")
-        )
-        .join("\n");
-  
-      try {
-        await navigator.clipboard.writeText(fullText);
-        toast.success("Copied to clipboard");
-      } catch (err) {
-        toast.error("Copy failed");
-      }
-    };
-  
-    const handleFullScreen = () => {
-      if (!editorRef.current) return;
-  
-      if (!document.fullscreenElement) {
-        editorRef.current.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    };
-
-      const maskFilePath = fullPath => {
-    if (!fullPath) return "";
-
-    const parts = fullPath.split("/");
-
-    if (parts.length <= 3) return fullPath;
-
-    const first = parts[0];
-    const lastFolder = parts[parts.length - 2];
-    const fileName = parts[parts.length - 1];
-
-    return `${first}/../${lastFolder}/${fileName}`;
-  };
-  
   const activeIssue = issues.find(i => i.id === activeIssueId);
 
   return (

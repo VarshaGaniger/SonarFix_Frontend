@@ -55,16 +55,16 @@ const ScanStatus = () => {
 
         // ================= COMPLETED =================
         if (backendStatus === "COMPLETED") {
-        setProgress(100);
+  setProgress(100);
 
-      if (!redirectedRef.current) {
-       redirectedRef.current = true;
-       clearInterval(intervalRef.current);
- 
-      setTimeout(() => {
-       navigate("/dashboard");
-     }, 1000); // optional 1s delay so user sees 100%
-   }
+  if (!redirectedRef.current) {
+    redirectedRef.current = true;
+    clearInterval(intervalRef.current);
+
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 1000); // optional 1s delay so user sees 100%
+  }
 }
 
         // ================= FAILED =================

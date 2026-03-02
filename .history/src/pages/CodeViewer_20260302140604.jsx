@@ -14,14 +14,14 @@ import {
   AlertCircle
 } from "lucide-react";
 import { toast } from "react-toastify";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation} from "react-router-dom";
 import axios from "axios";
 import "./CodeViewer.css";
-
+import { useLocation } from "react-router-dom";
 const CodeViewer = () => {
-  const { projectKey } = useParams();
+  const projectKey = "auto-project-4c02e6cd-4aca-46c2-bad9-9c87643fdb22";
   const location = useLocation();
-  const initialIssueKey = location.state?.issueKey;
+  const initialIssue = location.state?.issue;
 
   const editorRef = useRef(null);
 
@@ -31,18 +31,34 @@ const CodeViewer = () => {
   const [fileContent, setFileContent] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [activeIssueId, setActiveIssueId] = useState(null);
-  const [projectName, setProjectName] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  if (!projectKey) {
-    return <div style={{ padding: 20 }}>No project selected</div>;
-  }
 
   /* ================= FETCH ISSUES ================= */
 
   useEffect(() => {
+    if (!projectKey) return;
     fetchIssues();
   }, [projectKey]);
+
+  useEffect(() => {
+    if (!initialIssue || issues.length === 0) return;
+
+    const matchedIssue = issues.find(i => i.id === initialIssue.key);
+    if (!matchedIssue) return;
+
+    openFile(matchedIssue.file);
+    setActiveIssueId(matchedIssue.id);
+
+    setTimeout(() => {
+      const el = document.getElementById(`line-${matchedIssue.line}`);
+      if (el) {
+        el.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+    }, 400);
+  }, [issues, initialIssue]);
 
   const fetchIssues = async () => {
     try {
@@ -50,11 +66,16 @@ const CodeViewer = () => {
 
       const response = await axios.get(
         `http://localhost:8080/api/scan/${projectKey}/issues/all`,
-        { params: { page: 1, pageSize: 200 } }
+        {
+          params: {
+            page: 1,
+            pageSize: 200
+          }
+        }
       );
 
       const backendIssues =
-        response.data.content?.flatMap(g => g.issues) || [];
+        response.data.content?.flatMap(group => group.issues) || [];
 
       const mapped = backendIssues.map(issue => ({
         id: issue.key,
@@ -86,77 +107,17 @@ const CodeViewer = () => {
     }
   };
 
-  /* ================= FETCH PROJECT NAME ================= */
+  const toggleIssue = id => {
+    setIssues(prev =>
+      prev.map(issue =>
+        issue.id === id
+          ? { ...issue, selected: !issue.selected }
+          : issue
+      )
+    );
+  };
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const res = await axios.get(
-          "http://localhost:8080/api/sonar/projects"
-        );
-
-        const project = res.data.find(
-          p => p.projectKey === projectKey
-        );
-
-        if (project) setProjectName(project.name);
-
-      } catch (err) {
-        console.error("Failed to fetch project name", err);
-      }
-    };
-
-    fetchProject();
-  }, [projectKey]);
-
-  /* ================= INITIAL ISSUE (NAVIGATION) ================= */
-
-  useEffect(() => {
-    if (!initialIssueKey || issues.length === 0) return;
-
-    const matched = issues.find(i => i.id === initialIssueKey);
-    if (!matched) return;
-
-    openFile(matched.file);
-    setActiveIssueId(matched.id);
-
-  }, [issues, initialIssueKey]);
-
-  /* ================= DEFAULT FIRST ISSUE ================= */
-
-  useEffect(() => {
-    if (initialIssueKey) return;
-    if (issues.length === 0) return;
-    if (activeIssueId) return;
-
-    const first = issues[0];
-    if (!first) return;
-
-    openFile(first.file);
-    setActiveIssueId(first.id);
-
-  }, [issues]);
-
-  /* ================= SCROLL AFTER RENDER ================= */
-
-  useEffect(() => {
-    if (!fileContent?.lines) return;
-    if (!activeIssueId) return;
-
-    const active = issues.find(i => i.id === activeIssueId);
-    if (!active) return;
-
-    const el = document.getElementById(`line-${active.line}`);
-    if (el) {
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }
-
-  }, [fileContent, activeIssueId]);
-
-  /* ================= FILE FETCH ================= */
+  /* ================= FETCH FILE ================= */
 
   const openFile = async filePath => {
     try {
@@ -173,18 +134,40 @@ const CodeViewer = () => {
     }
   };
 
-  /* ================= ISSUE ACTIONS ================= */
+  /* ================= GROUP FILES ================= */
 
-  const toggleIssue = id => {
+  const files = [...new Set(issues.map(i => i.file))];
+
+  const getFileIssues = filePath =>
+    issues.filter(issue => issue.file === filePath);
+
+  const isFileFullySelected = filePath => {
+    const fileIssues = getFileIssues(filePath);
+    if (fileIssues.length === 0) return false;
+    return fileIssues.every(i => i.selected);
+  };
+
+  const toggleFileSelectAll = filePath => {
+    const fileIssues = getFileIssues(filePath);
+    const allSelected = fileIssues.every(i => i.selected);
+
     setIssues(prev =>
       prev.map(issue =>
-        issue.id === id
-          ? { ...issue, selected: !issue.selected }
+        issue.file === filePath
+          ? { ...issue, selected: !allSelected }
           : issue
       )
     );
   };
- /* ================= AUTO FIX ================= */
+
+  const toggleFileExpand = filePath => {
+    setOpenFiles(prev => ({
+      ...prev,
+      [filePath]: !prev[filePath]
+    }));
+  };
+
+  /* ================= AUTO FIX ================= */
 
   const applySelected = async () => {
     const selectedIssues = issues.filter(i => i.selected);
@@ -221,47 +204,8 @@ const CodeViewer = () => {
       console.error("Auto-fix all failed", err);
     }
   };
- /* ================= GROUP FILES ================= */
 
-  const files = [...new Set(issues.map(i => i.file))];
-
-  const getFileIssues = filePath =>
-    issues.filter(issue => issue.file === filePath);
-
-  const isFileFullySelected = filePath => {
-    const fileIssues = getFileIssues(filePath);
-    if (fileIssues.length === 0) return false;
-    return fileIssues.every(i => i.selected);
-  };
-
-  const handleCopy = async () => {
-      if (!fileContent?.lines) return;
-  
-      const fullText = fileContent.lines
-        .map(line =>
-          line.segments.map(segment => segment.text).join("")
-        )
-        .join("\n");
-  
-      try {
-        await navigator.clipboard.writeText(fullText);
-        toast.success("Copied to clipboard");
-      } catch (err) {
-        toast.error("Copy failed");
-      }
-    };
-  
-    const handleFullScreen = () => {
-      if (!editorRef.current) return;
-  
-      if (!document.fullscreenElement) {
-        editorRef.current.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    };
-
-      const maskFilePath = fullPath => {
+  const maskFilePath = fullPath => {
     if (!fullPath) return "";
 
     const parts = fullPath.split("/");
@@ -274,7 +218,34 @@ const CodeViewer = () => {
 
     return `${first}/../${lastFolder}/${fileName}`;
   };
-  
+
+  const handleCopy = async () => {
+    if (!fileContent?.lines) return;
+
+    const fullText = fileContent.lines
+      .map(line =>
+        line.segments.map(segment => segment.text).join("")
+      )
+      .join("\n");
+
+    try {
+      await navigator.clipboard.writeText(fullText);
+      toast.success("Copied to clipboard");
+    } catch (err) {
+      toast.error("Copy failed");
+    }
+  };
+
+  const handleFullScreen = () => {
+    if (!editorRef.current) return;
+
+    if (!document.fullscreenElement) {
+      editorRef.current.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   const activeIssue = issues.find(i => i.id === activeIssueId);
 
   return (
@@ -285,7 +256,7 @@ const CodeViewer = () => {
             Projects
           </Link>
           <Link underline="hover" color="#64748b">
-            {projectName || projectKey}
+            {projectKey}
           </Link>
           <Typography sx={{ fontSize: "13px", fontWeight: 600 }}>
             Code Viewer

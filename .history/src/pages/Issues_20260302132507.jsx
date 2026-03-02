@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Issues.css";
-import axios from "axios";
+
 import {
   Box,
   Pagination,
@@ -18,7 +18,7 @@ const QUALITIES = ["Security", "Reliability", "Maintainability"];
 
 const Issues = () => {
   const navigate = useNavigate();
-  const { projectKey } = useParams();
+const projectKey = "auto-project-4c02e6cd-4aca-46c2-bad9-9c87643fdb22";
 
   const itemsPerPage = 10;
 
@@ -35,7 +35,7 @@ const Issues = () => {
 
   const [ruleSearch, setRuleSearch] = useState("");
   const [allRules, setAllRules] = useState([]);
-  const [projectName, setProjectName] = useState(null);
+
   const [stableSeverityCounts, setStableSeverityCounts] = useState({});
   const [stableQualityCounts, setStableQualityCounts] = useState({});
   const [stableRuleCounts, setStableRuleCounts] = useState({});
@@ -70,34 +70,6 @@ const Issues = () => {
 
     return params.toString();
   };
-
-  
-  useEffect(() => {
-  if (!projectKey) return;
-
-  const fetchProject = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:8080/api/sonar/projects"
-      );
-
-      const project = res.data.find(
-        p => p.projectKey === projectKey
-      );
-
-      if (project) {
-        setProjectName(project.name);
-      }
-
-    } catch (err) {
-      console.error("Failed to fetch project name", err);
-    }
-  };
-
-  fetchProject();
-
-}, [projectKey]);
-
 
   /* ================= FETCH LOGIC ================= */
 
@@ -267,7 +239,7 @@ const Issues = () => {
         <Typography variant="body2" sx={{ color: "#64748b" }}>
           Manage and remediate code quality issues for{" "}
           <Chip
-            label={projectName}
+            label={projectKey}
             size="small"
             sx={{
               bgcolor: "#eff6ff",
@@ -309,8 +281,9 @@ const Issues = () => {
                   {QUALITIES.map(q => (
                     <div
                       key={q}
-                      className={`row ${selectedQualities.includes(q) ? "selected" : ""
-                        }`}
+                      className={`row ${
+                        selectedQualities.includes(q) ? "selected" : ""
+                      }`}
                       onClick={() => toggleQuality(q)}
                     >
                       {q}
@@ -322,42 +295,43 @@ const Issues = () => {
             </div>
 
             {/* RULE */}
-            <div className={`section ${ruleOpen ? "rule-open" : ""}`}>
-              <div
-                className="section-header"
-                onClick={() => setRuleOpen(prev => !prev)}
-              >
-                <span className={`chevron ${ruleOpen ? "open" : ""}`}>
-                  <ChevronRight size={16} />
-                </span>
-                <span>Rule</span>
-              </div>
+<div className={`section ${ruleOpen ? "rule-open" : ""}`}>
+  <div
+    className="section-header"
+    onClick={() => setRuleOpen(prev => !prev)}
+  >
+    <span className={`chevron ${ruleOpen ? "open" : ""}`}>
+      <ChevronRight size={16} />
+    </span>
+    <span>Rule</span>
+  </div>
 
-              <div className={`collapse ${ruleOpen ? "open" : ""}`}>
-                <div className="collapse-inner">
-                  <input
-                    className="rule-search"
-                    placeholder="Search rules..."
-                    value={ruleSearch}
-                    onChange={e => setRuleSearch(e.target.value)}
-                  />
+  <div className={`collapse ${ruleOpen ? "open" : ""}`}>
+    <div className="collapse-inner">
+      <input
+        className="rule-search"
+        placeholder="Search rules..."
+        value={ruleSearch}
+        onChange={e => setRuleSearch(e.target.value)}
+      />
 
-                  <div className="rule-list">
-                    {visibleRules.map(rule => (
-                      <div
-                        key={rule}
-                        className={`rule-item ${selectedRules.includes(rule) ? "selected" : ""
-                          }`}
-                        onClick={() => toggleRule(rule)}
-                      >
-                        {rule}
-                        <span>{stableRuleCounts[rule] ?? 0}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div className="rule-list">
+        {visibleRules.map(rule => (
+          <div
+            key={rule}
+            className={`rule-item ${
+              selectedRules.includes(rule) ? "selected" : ""
+            }`}
+            onClick={() => toggleRule(rule)}
+          >
+            {rule}
+            <span>{stableRuleCounts[rule] ?? 0}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
             {/* SEVERITY */}
 
             <div
@@ -375,8 +349,9 @@ const Issues = () => {
                 {SEVERITIES.map(sev => (
                   <div
                     key={sev}
-                    className={`row ${selectedSeverities.includes(sev) ? "selected" : ""
-                      }`}
+                    className={`row ${
+                      selectedSeverities.includes(sev) ? "selected" : ""
+                    }`}
                     onClick={() => toggleSeverity(sev)}
                   >
                     {sev.charAt(0) + sev.slice(1).toLowerCase()}
@@ -389,51 +364,51 @@ const Issues = () => {
 
           {/* ================= ISSUES LIST ================= */}
 
-          <div className="issues">
+         <div className="issues">
 
-            <div className="issues-content">
-              {Object.keys(groupedIssues).map(file => (
-                <div key={file} className="file-group">
-                  <div className="file-path">{file}</div>
+  <div className="issues-content">
+    {Object.keys(groupedIssues).map(file => (
+      <div key={file} className="file-group">
+        <div className="file-path">{file}</div>
 
-                  {groupedIssues[file].map(issue => (
-                    <div
-                      key={issue.key}
-                      className="issue-card"
-                      onClick={() =>
-                       navigate(`/projects/${projectKey}/code`, {
-  state: { issueKey: issue.key }
-})
-                      }
-                    >
-                      <div className="issue-main">
-                        <div className="issue-title">
-                          {issue.message}
-                        </div>
-                        <div className="badges-row">
-                          <span className="type-badge">
-                            {issue.softwareQuality}
-                          </span>
-                          <span className="type-badge">
-                            {issue.severity}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="issue-side">
-                        <span className="right-badge">{issue.rule}</span>
-                        {issue.autoFixable && (
-                          <span className="mini-tag">Auto-Fixable</span>
-                        )}
-                        <div className="line-info">
-                          L{issue.line}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
+        {groupedIssues[file].map(issue => (
+          <div
+            key={issue.key}
+            className="issue-card"
+            onClick={() =>
+              navigate("/code-viewer", {
+                state: { issue, projectKey }
+              })
+            }
+          >
+            <div className="issue-main">
+              <div className="issue-title">
+                {issue.message}
+              </div>
+              <div className="badges-row">
+                <span className="type-badge">
+                  {issue.softwareQuality}
+                </span>
+                <span className="type-badge">
+                  {issue.severity}
+                </span>
+              </div>
             </div>
+
+            <div className="issue-side">
+              <span className="right-badge">{issue.rule}</span>
+              {issue.autoFixable && (
+                <span className="mini-tag">Auto-Fixable</span>
+              )}
+              <div className="line-info">
+                L{issue.line}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
             {loading && (
               <div className="overlay-loader">
                 <div className="spinner"></div>

@@ -256,12 +256,30 @@ const Dashboard = () => {
                             <TableContainer>
                                 <Table sx={{ minWidth: 650 }} aria-label="recent projects table">
                                     <TableHead sx={{ bgcolor: '#f8fafc' }}>
-                                        <TableRow>
-                                            <TableCell sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>PROJECT KEY</TableCell>
-                                            <TableCell sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>PROJECT NAME</TableCell>
-                                            <TableCell sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>DESCRIPTION</TableCell>
-                                            <TableCell align="right" sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>ACTION</TableCell>
-                                        </TableRow>
+                                       <TableRow key={row.projectKey} hover>
+  <TableCell component="th" scope="row" sx={{ fontWeight: 600, color: '#1e293b' }}>
+    {row.projectKey}
+  </TableCell>
+
+  <TableCell sx={{ color: '#334155', fontWeight: 500 }}>
+    {row.name}
+  </TableCell>
+
+  <TableCell sx={{ color: '#64748b' }}>
+    {row.description || "Spring Boot Project"}
+  </TableCell>
+
+  <TableCell align="right">
+    <Button
+      size="small"
+      sx={{ textTransform: 'none', fontWeight: 600 }}
+      startIcon={<ExternalLink size={14} />}
+      onClick={() => navigate(`/projects/${row.projectKey}/issues`)}
+    >
+      View Issues
+    </Button>
+  </TableCell>
+</TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {recentProjects.length > 0 ? (
@@ -270,7 +288,6 @@ const Dashboard = () => {
                                                     <TableCell component="th" scope="row" sx={{ fontWeight: 600, color: '#1e293b' }}>
                                                         {row.projectKey}
                                                     </TableCell>
-                                                    <TableCell sx={{ color: '#94a3b8', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.05em' }}>{row.name}</TableCell>
                                                     <TableCell sx={{ color: '#64748b' }}>
                                                         {row.description || "Spring Boot Project"}
                                                     </TableCell>

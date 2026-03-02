@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Issues.css";
-import axios from "axios";
+
 import {
   Box,
   Pagination,
@@ -73,12 +73,10 @@ const Issues = () => {
 
   
   useEffect(() => {
-  if (!projectKey) return;
-
   const fetchProject = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8080/api/sonar/projects"
+        `http://localhost:8080/api/sonar/projects`
       );
 
       const project = res.data.find(
@@ -88,16 +86,15 @@ const Issues = () => {
       if (project) {
         setProjectName(project.name);
       }
-
     } catch (err) {
       console.error("Failed to fetch project name", err);
     }
   };
 
-  fetchProject();
-
+  if (projectKey) {
+    fetchProject();
+  }
 }, [projectKey]);
-
 
   /* ================= FETCH LOGIC ================= */
 
@@ -267,7 +264,7 @@ const Issues = () => {
         <Typography variant="body2" sx={{ color: "#64748b" }}>
           Manage and remediate code quality issues for{" "}
           <Chip
-            label={projectName}
+            label={projectNa
             size="small"
             sx={{
               bgcolor: "#eff6ff",

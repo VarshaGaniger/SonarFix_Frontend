@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Issues.css";
-import axios from "axios";
+
 import {
   Box,
   Pagination,
@@ -18,7 +18,7 @@ const QUALITIES = ["Security", "Reliability", "Maintainability"];
 
 const Issues = () => {
   const navigate = useNavigate();
-  const { projectKey } = useParams();
+  const projectKey = "auto-project-4c02e6cd-4aca-46c2-bad9-9c87643fdb22";
 
   const itemsPerPage = 10;
 
@@ -35,7 +35,7 @@ const Issues = () => {
 
   const [ruleSearch, setRuleSearch] = useState("");
   const [allRules, setAllRules] = useState([]);
-  const [projectName, setProjectName] = useState(null);
+
   const [stableSeverityCounts, setStableSeverityCounts] = useState({});
   const [stableQualityCounts, setStableQualityCounts] = useState({});
   const [stableRuleCounts, setStableRuleCounts] = useState({});
@@ -70,34 +70,6 @@ const Issues = () => {
 
     return params.toString();
   };
-
-  
-  useEffect(() => {
-  if (!projectKey) return;
-
-  const fetchProject = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:8080/api/sonar/projects"
-      );
-
-      const project = res.data.find(
-        p => p.projectKey === projectKey
-      );
-
-      if (project) {
-        setProjectName(project.name);
-      }
-
-    } catch (err) {
-      console.error("Failed to fetch project name", err);
-    }
-  };
-
-  fetchProject();
-
-}, [projectKey]);
-
 
   /* ================= FETCH LOGIC ================= */
 
@@ -267,7 +239,7 @@ const Issues = () => {
         <Typography variant="body2" sx={{ color: "#64748b" }}>
           Manage and remediate code quality issues for{" "}
           <Chip
-            label={projectName}
+            label={projectKey}
             size="small"
             sx={{
               bgcolor: "#eff6ff",
@@ -401,9 +373,9 @@ const Issues = () => {
                       key={issue.key}
                       className="issue-card"
                       onClick={() =>
-                       navigate(`/projects/${projectKey}/code`, {
-  state: { issueKey: issue.key }
-})
+                        navigate("/code-viewer", {
+                          state: { issue, projectKey }
+                        })
                       }
                     >
                       <div className="issue-main">

@@ -60,11 +60,11 @@ const ScanStatus = () => {
       if (!redirectedRef.current) {
        redirectedRef.current = true;
        clearInterval(intervalRef.current);
- 
-      setTimeout(() => {
-       navigate("/dashboard");
-     }, 1000); // optional 1s delay so user sees 100%
-   }
+
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 1000); // optional 1s delay so user sees 100%
+  }
 }
 
         // ================= FAILED =================

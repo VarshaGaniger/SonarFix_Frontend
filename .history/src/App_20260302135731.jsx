@@ -40,12 +40,16 @@ const RequireAuth = () => {
 };
 
 /* ================= PROJECT LAYOUT ================= */
+/*
+  This acts like Sonar's project header.
+  It scopes all project-based pages.
+*/
 
 const ProjectLayout = () => {
   return <Outlet />;
 };
 
-/* ================= APP ================= */
+/* ================= APP ROUTING ================= */
 
 function App() {
   return (
@@ -54,35 +58,58 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          {/* Public */}
+          {/* ================= PUBLIC ROUTE ================= */}
           <Route path="/" element={<Login />} />
 
-          {/* Protected */}
+          {/* ================= PROTECTED ROUTES ================= */}
           <Route element={<RequireAuth />}>
             <Route element={<MainLayout />}>
 
-              {/* Global Pages */}
+              {/* ===== GLOBAL PAGES ===== */}
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="upload" element={<UploadProject />} />
               <Route path="scan-status/:scanId?" element={<ScanStatus />} />
 
-              {/* Project Scoped Pages */}
+              {/* ===== PROJECT-SCOPED ROUTES ===== */}
               <Route path="projects/:projectKey" element={<ProjectLayout />}>
 
-                {/* Default → Issues */}
+                {/* Project Overview (optional later) */}
                 <Route index element={<Issues />} />
 
+                {/* Issues List */}
                 <Route path="issues" element={<Issues />} />
-                <Route path="code" element={<CodeViewer />} />
-                <Route path="diff" element={<DiffViewer />} />
+
+                {/* Code Viewer (Issue Detail) */}
+                <Route
+                  path="issues/:issueKey"
+                  element={<CodeViewer />}
+                />
+
+                {/* Diff Viewer */}
+                <Route
+                  path="issues/:issueKey/diff"
+                  element={<DiffViewer />}
+                />
+
+                {/* Summary */}
                 <Route path="summary" element={<SummaryDownload />} />
 
               </Route>
 
+              {/* ===== Placeholder Routes ===== */}
+              <Route path="rules" element={<div>Rules </div>} />
+              <Route path="history" element={<div>History (Coming Soon)</div>} />
+              <Route path="remediation" element={<div>Remediation</div>} />
+              <Route path="reports" element={<div>Reports</div>} />
+              <Route path="security-hotspots" element={<div>Security Hotspots</div>} />
+              <Route path="code-measures" element={<div>Code Measures</div>} />
+              <Route path="team-access" element={<div>Team Access</div>} />
+              <Route path="settings" element={<div>Settings</div>} />
+
             </Route>
           </Route>
 
-          {/* Fallback */}
+          {/* ================= FALLBACK ================= */}
           <Route path="*" element={<Navigate to="/" replace />} />
 
         </Routes>

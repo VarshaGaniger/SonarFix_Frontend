@@ -178,7 +178,7 @@ const Sidebar = () => {
                     }
                   }}
                 >
-                  <ListItemText primary="Issues Explorer" />
+                  <ListItemText primary="Issues E" />
                 </ListItemButton>
 
                 <ListItemButton

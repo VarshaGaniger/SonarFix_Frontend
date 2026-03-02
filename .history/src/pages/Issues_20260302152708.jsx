@@ -267,7 +267,7 @@ const Issues = () => {
         <Typography variant="body2" sx={{ color: "#64748b" }}>
           Manage and remediate code quality issues for{" "}
           <Chip
-            label={projectName}
+            label={projectNam}
             size="small"
             sx={{
               bgcolor: "#eff6ff",
