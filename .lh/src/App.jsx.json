@@ -1,0 +1,46 @@
+{
+    "sourceFile": "src/App.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 7,
+            "patches": [
+                {
+                    "date": 1772450831689,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1772450838515,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -57,9 +57,9 @@\n           {/* Public */}\r\n           <Route path=\"/\" element={<Login />} />\r\n \r\n           {/* Protected */}\r\n-        //  <Route element={<RequireAuth />}>\r\n+          <Route element={<RequireAuth />}>\r\n             <Route element={<MainLayout />}>\r\n \r\n               {/* Global Pages */}\r\n               <Route path=\"dashboard\" element={<Dashboard />} />\r\n"
+                },
+                {
+                    "date": 1772450854186,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -56,10 +56,9 @@\n \r\n           {/* Public */}\r\n           <Route path=\"/\" element={<Login />} />\r\n \r\n-          {/* Protected */}\r\n-          <Route element={<RequireAuth />}>\r\n+       \r\n             <Route element={<MainLayout />}>\r\n \r\n               {/* Global Pages */}\r\n               <Route path=\"dashboard\" element={<Dashboard />} />\r\n"
+                },
+                {
+                    "date": 1772450894044,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -56,9 +56,10 @@\n \r\n           {/* Public */}\r\n           <Route path=\"/\" element={<Login />} />\r\n \r\n-       \r\n+          {/* Protected */}\r\n+          <Route element={<RequireAuth />}>\r\n             <Route element={<MainLayout />}>\r\n \r\n               {/* Global Pages */}\r\n               <Route path=\"dashboard\" element={<Dashboard />} />\r\n"
+                },
+                {
+                    "date": 1772450926326,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -73,9 +73,9 @@\n                 <Route index element={<Issues />} />\r\n \r\n                 <Route path=\"issues\" element={<Issues />} />\r\n                 <Route path=\"code\" element={<CodeViewer />} />\r\n-                <Route path=\"diff\" element={<DiffViewer />} />\r\n+              /*  <Route path=\"diff\" element={<DiffViewer />} />\r\n                 <Route path=\"summary\" element={<SummaryDownload />} />\r\n \r\n               </Route>\r\n \r\n"
+                },
+                {
+                    "date": 1772450932469,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -73,9 +73,9 @@\n                 <Route index element={<Issues />} />\r\n \r\n                 <Route path=\"issues\" element={<Issues />} />\r\n                 <Route path=\"code\" element={<CodeViewer />} />\r\n-              /*  <Route path=\"diff\" element={<DiffViewer />} />\r\n+              <--  <Route path=\"diff\" element={<DiffViewer />} />\r\n                 <Route path=\"summary\" element={<SummaryDownload />} />\r\n \r\n               </Route>\r\n \r\n"
+                },
+                {
+                    "date": 1772450962912,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -73,9 +73,9 @@\n                 <Route index element={<Issues />} />\r\n \r\n                 <Route path=\"issues\" element={<Issues />} />\r\n                 <Route path=\"code\" element={<CodeViewer />} />\r\n-              <--  <Route path=\"diff\" element={<DiffViewer />} />\r\n+               <Route path=\"diff\" element={<DiffViewer />} />\r\n                 <Route path=\"summary\" element={<SummaryDownload />} />m-\r\n \r\n               </Route>\r\n \r\n"
+                },
+                {
+                    "date": 1772451066025,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -74,9 +74,9 @@\n \r\n                 <Route path=\"issues\" element={<Issues />} />\r\n                 <Route path=\"code\" element={<CodeViewer />} />\r\n                {/*<Route path=\"diff\" element={<DiffViewer />} />\r\n-                <Route path=\"summary\" element={<SummaryDownload />} />/*\r\n+                <Route path=\"summary\" element={<SummaryDownload />} />/*}\r\n \r\n               </Route>\r\n \r\n             </Route>\r\n"
+                }
+            ],
+            "date": 1772450831688,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\nimport {\r\n  BrowserRouter,\r\n  Routes,\r\n  Route,\r\n  Navigate,\r\n  Outlet,\r\n  useLocation\r\n} from 'react-router-dom';\r\n\r\nimport { ThemeProvider } from '@mui/material/styles';\r\nimport CssBaseline from '@mui/material/CssBaseline';\r\nimport theme from './theme/theme';\r\n\r\nimport MainLayout from './layouts/MainLayout';\r\n\r\nimport Dashboard from './pages/Dashboard';\r\nimport Issues from './pages/Issues';\r\nimport Login from './pages/Login';\r\nimport UploadProject from './pages/UploadProject';\r\nimport ScanStatus from './pages/ScanStatus';\r\nimport DiffViewer from './pages/DiffViewer';\r\nimport CodeViewer from './pages/CodeViewer';\r\nimport SummaryDownload from './pages/SummaryDownload';\r\n\r\nimport { ToastContainer } from \"react-toastify\";\r\nimport \"react-toastify/dist/ReactToastify.css\";\r\n\r\n/* ================= AUTH WRAPPER ================= */\r\n\r\nconst RequireAuth = () => {\r\n  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';\r\n  const location = useLocation();\r\n\r\n  if (!isAuthenticated) {\r\n    return <Navigate to=\"/\" state={{ from: location }} replace />;\r\n  }\r\n\r\n  return <Outlet />;\r\n};\r\n\r\n/* ================= PROJECT LAYOUT ================= */\r\n\r\nconst ProjectLayout = () => {\r\n  return <Outlet />;\r\n};\r\n\r\n/* ================= APP ================= */\r\n\r\nfunction App() {\r\n  return (\r\n    <ThemeProvider theme={theme}>\r\n      <CssBaseline />\r\n      <BrowserRouter>\r\n        <Routes>\r\n\r\n          {/* Public */}\r\n          <Route path=\"/\" element={<Login />} />\r\n\r\n          {/* Protected */}\r\n        //  <Route element={<RequireAuth />}>\r\n            <Route element={<MainLayout />}>\r\n\r\n              {/* Global Pages */}\r\n              <Route path=\"dashboard\" element={<Dashboard />} />\r\n              <Route path=\"upload\" element={<UploadProject />} />\r\n              <Route path=\"scan-status/:scanId?\" element={<ScanStatus />} />\r\n\r\n              {/* Project Scoped Pages */}\r\n              <Route path=\"projects/:projectKey\" element={<ProjectLayout />}>\r\n\r\n                {/* Default → Issues */}\r\n                <Route index element={<Issues />} />\r\n\r\n                <Route path=\"issues\" element={<Issues />} />\r\n                <Route path=\"code\" element={<CodeViewer />} />\r\n                <Route path=\"diff\" element={<DiffViewer />} />\r\n                <Route path=\"summary\" element={<SummaryDownload />} />\r\n\r\n              </Route>\r\n\r\n            </Route>\r\n          </Route>\r\n\r\n          {/* Fallback */}\r\n          <Route path=\"*\" element={<Navigate to=\"/\" replace />} />\r\n\r\n        </Routes>\r\n\r\n        <ToastContainer position=\"top-right\" autoClose={3000} />\r\n      </BrowserRouter>\r\n    </ThemeProvider>\r\n  );\r\n}\r\n\r\nexport default App;"
+        }
+    ]
+}

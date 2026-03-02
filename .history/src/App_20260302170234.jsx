@@ -65,8 +65,6 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="upload" element={<UploadProject />} />
               <Route path="scan-status/:scanId?" element={<ScanStatus />} />
-                <Route path="diff" element={<DiffViewer />} />
-                <Route path="summary" element={<SummaryDownload />} />
 
               {/* Project Scoped Pages */}
               <Route path="projects/:projectKey" element={<ProjectLayout />}>
@@ -79,11 +77,10 @@ function App() {
 
                {/*for integration with diff viewer and summary download, currently not implemented
                <Route path="diff" element={<DiffViewer />} />
-                <Route path="summary" element={<SummaryDownload />} />
-                */}
+                <Route path="summary" element={<SummaryDownload />} />*/}//for integration with diff viewer and summary download, currently not implemented
 
               </Route>
-          
+
             </Route>
           </Route>
 

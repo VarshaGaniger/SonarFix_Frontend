@@ -42,14 +42,9 @@ const Sidebar = () => {
       path: '/upload'
     },
     {
-      text: 'Diff Viewer',
+      text: 'Scan Status',
       icon: <Activity size={20} />,
-      path: '/diff'
-    },
-        {
-      text: 'Summary and Download',
-      icon: <Activity size={20} />,
-      path: '/summary'
+      path: '/scan-status'
     }
   ];
 
@@ -205,13 +200,11 @@ const Sidebar = () => {
                 >
                   <ListItemText primary="Code Viewer" />
                 </ListItemButton>
-                  {/* for integration..
-                  
                 <ListItemButton
                   selected={location.pathname.includes('/diff')}
                   onClick={() =>
-                   navigate(`/projects/${projectKey}/diff`) 
-                    
+              //      navigate(`/projects/${projectKey}/diff`) for integratiom with diff viewer
+                      navigate(`/proj/diff)
                   }
                   sx={{
                     borderRadius: 2,
@@ -231,8 +224,7 @@ const Sidebar = () => {
                 <ListItemButton
                   selected={location.pathname.includes('/summary')}
                   onClick={() =>
-                   navigate(`/projects/${projectKey}/summary`)
-                  
+                    navigate(`/projects/${projectKey}/summary`)
                   }
                   sx={{
                     borderRadius: 2,
@@ -247,7 +239,7 @@ const Sidebar = () => {
                   }}
                 >
                   <ListItemText primary="Summary" />
-                </ListItemButton> */}
+                </ListItemButton>
               </Box>
             </>
           )}
