@@ -242,7 +242,10 @@
 
 /* Checkbox */
 .issue-item input[type="checkbox"] {
-  margin-top: 3px;
+  margin-top: 4px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
 
 /* ===== ISSUE CONTENT ===== */
@@ -256,32 +259,30 @@
 .issue-top {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 6px;
 }
 
 .issue-top h4 {
-  flex: 1;
-  margin: 0;
   font-size: 14px;
-  font-weight: 500;
-  line-height: 1.6;   
+  font-weight: 600;
+  margin: 0;
+  color: #0f172a;
 }
 
 /* AUTO Badge */
 .auto {
-  flex-shrink: 0;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
   background: #dcfce7;
   color: #059669;
-  white-space: nowrap;
 }
 
 /* Description */
 .issue-content p {
-  margin: 4px 0 6px ;
+  margin: 4px 0 6px 0;
   font-size: 13px;
   color: #64748b;
   line-height: 1.5;

@@ -22,13 +22,15 @@
 }
 
 /* ================= LEFT PANEL ================= */
+
 .left-panel {
-  background: #ffffff;
+  background: #f9fbff;
   border-right: 1px solid #e5e9f2;
-  flex: 0 0 340px;
   display: flex;
+  flex: 0 0 320px;
   flex-direction: column;
   overflow-y: auto;
+  overflow-x: hidden;       
 }
 
 .file-name,
@@ -242,7 +244,10 @@
 
 /* Checkbox */
 .issue-item input[type="checkbox"] {
-  margin-top: 3px;
+  margin-top: 4px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
 
 /* ===== ISSUE CONTENT ===== */
@@ -256,33 +261,31 @@
 .issue-top {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 6px;
 }
 
 .issue-top h4 {
-  flex: 1;
-  margin: 0;
   font-size: 14px;
-  font-weight: 500;
-  line-height: 1.6;   
+  font-weight: 600;
+  margin: 0;
+  color: #0f172a;
 }
 
 /* AUTO Badge */
 .auto {
-  flex-shrink: 0;
   font-size: 11px;
   font-weight: 600;
   padding: 3px 8px;
   border-radius: 6px;
-  background: #dcfce7;
+  background: #d1fae5;
   color: #059669;
-  white-space: nowrap;
 }
 
 /* Description */
 .issue-content p {
-  margin: 4px 0 6px ;
-  font-size: 13px;
+  margin: 0 0 8px 0;
+  font-size: 14px;
   color: #64748b;
   line-height: 1.5;
 }

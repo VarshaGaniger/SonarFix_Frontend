@@ -42,9 +42,9 @@ const Sidebar = () => {
       path: '/upload'
     },
      {
-      text: 'Scan Status',
+      text: 'Diff Viewer',
       icon: <Activity size={20} />,
-      path: '/scan-status'
+      path: '/diff'
     },
     {
       text: 'Diff Viewer',

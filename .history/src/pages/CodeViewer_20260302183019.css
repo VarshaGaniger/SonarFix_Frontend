@@ -263,8 +263,8 @@
   flex: 1;
   margin: 0;
   font-size: 14px;
-  font-weight: 500;
-  line-height: 1.6;   
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 /* AUTO Badge */
@@ -281,7 +281,7 @@
 
 /* Description */
 .issue-content p {
-  margin: 4px 0 6px ;
+  margin: 4px 0 6px 0;
   font-size: 13px;
   color: #64748b;
   line-height: 1.5;

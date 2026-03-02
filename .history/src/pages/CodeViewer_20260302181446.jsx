@@ -413,11 +413,13 @@ const CodeViewer = () => {
 
                       <div className="issue-content">
                         <div className="issue-top">
-                          <h4>{issue.title}</h4>
+                          <h4>{issue.message}</h4>
                           {issue.autoFix && (
                             <span className="auto">AUTO</span>
                           )}
                         </div>
+
+                        <p>{issue.title}</p>
 
                         <div className="issue-meta">
                           <span className={issue.severity}>

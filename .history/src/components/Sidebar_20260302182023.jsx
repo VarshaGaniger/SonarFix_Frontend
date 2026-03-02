@@ -44,7 +44,7 @@ const Sidebar = () => {
      {
       text: 'Scan Status',
       icon: <Activity size={20} />,
-      path: '/scan-status'
+      path: '/s'
     },
     {
       text: 'Diff Viewer',

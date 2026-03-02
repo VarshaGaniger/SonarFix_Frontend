@@ -419,6 +419,8 @@ const CodeViewer = () => {
                           )}
                         </div>
 
+                        <p>{issue.title}</p>
+
                         <div className="issue-meta">
                           <span className={issue.severity}>
                             {issue.severity.toUpperCase()}

@@ -417,7 +417,7 @@ const CodeViewer = () => {
                           {issue.autoFix && (
                             <span className="auto">AUTO</span>
                           )}
-                        </div>
+                        </div
 
                         <div className="issue-meta">
                           <span className={issue.severity}>
