@@ -377,7 +377,7 @@ const CodeViewer = () => {
                     <div
                       key={issue.id}
                       className={`issue-item ${
-                        issue.selected ? "active" : ""
+                        activeIssueId === issue.id ? "active" : ""
                       }`}
                       onClick={() => {
                         openFile(issue.file);
@@ -536,66 +536,67 @@ const CodeViewer = () => {
           )}
 
           {activeTab === "why" && activeIssue && (
-            <div className="why-container">
-              {activeIssue.whyBlocks?.map((block, index) => {
-                if (block.type === "heading") {
-                  return <h3 key={index}>{block.text}</h3>;
-                }
+  <div className="why-container">
+    {activeIssue.whyBlocks?.map((block, index) => {
 
-                if (block.type === "paragraph") {
-                  return (
-                    <p key={index} className="justified">
-                      {block.text}
-                    </p>
-                  );
-                }
+      if (block.type === "heading") {
+        return <h3 key={index}>{block.text}</h3>;
+      }
 
-                if (block.type === "unordered_list") {
-                  return (
-                    <ul key={index}>
-                      {block.items.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
-                  );
-                }
+      if (block.type === "paragraph") {
+        return (
+          <p key={index} className="justified">
+            {block.text}
+          </p>
+        );
+      }
 
-                if (block.type === "ordered_list") {
-                  return (
-                    <ol key={index}>
-                      {block.items.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ol>
-                  );
-                }
+      if (block.type === "unordered_list") {
+        return (
+          <ul key={index}>
+            {block.items.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        );
+      }
 
-                return null;
-              })}
+      if (block.type === "ordered_list") {
+        return (
+          <ol key={index}>
+            {block.items.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ol>
+        );
+      }
 
-              {activeIssue.nonCompliantExample && (
-                <div className="code-example">
-                  <h4>Noncompliant Example</h4>
-                  <pre>
-                    <code>
-                      {activeIssue.nonCompliantExample}
-                    </code>
-                  </pre>
-                </div>
-              )}
+      if (block.type === "noncompliant_code") {
+        return (
+          <div key={index} className="code-example">
+            <h4>Noncompliant Example</h4>
+            <pre>
+              <code>{block.text}</code>
+            </pre>
+          </div>
+        );
+      }
 
-              {activeIssue.compliantExample && (
-                <div className="code-example">
-                  <h4>Compliant Example</h4>
-                  <pre>
-                    <code>
-                      {activeIssue.compliantExample}
-                    </code>
-                  </pre>
-                </div>
-              )}
-            </div>
-          )}
+      if (block.type === "compliant_code") {
+        return (
+          <div key={index} className="code-example">
+            <h4>Compliant Example</h4>
+            <pre>
+              <code>{block.text}</code>
+            </pre>
+          </div>
+        );
+      }
+
+      return null;
+    })}
+  </div>
+)}
         </section>
       </main>
     </Box>

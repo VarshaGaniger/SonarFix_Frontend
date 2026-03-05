@@ -236,8 +236,8 @@
 }
 
 .issue-item.active {
-  background: #eef2f7;
-  border-left: 3px solid #ef4444;
+  background: #eef2ff;
+  border-left: 3px solid #2563eb;
 }
 
 /* Checkbox */
