@@ -1,0 +1,274 @@
+/* RIGHT PANEL */
+
+.diff-content{
+flex:1;
+display:flex;
+flex-direction:column;
+background:#f8fafc;
+padding:20px;
+overflow:hidden;
+}
+
+/* FILE HEADER */
+
+.diff-file-header{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 16px;
+background:white;
+border:1px solid #e5e7eb;
+border-radius:8px;
+margin-bottom:12px;
+font-weight:600;
+}
+
+.diff-file-name{
+font-size:14px;
+font-weight:600;
+color:#1e293b;
+}
+
+/* SIDE BY SIDE DIFF */
+
+.diff-side-container{
+display:flex;
+gap:12px;
+flex:1;
+overflow:auto;
+}
+
+/* DIFF PANEL */
+
+.diff-panel{
+flex:1;
+background:white;
+border:1px solid #e5e7eb;
+border-radius:8px;
+display:flex;
+flex-direction:column;
+min-width:0;
+}
+
+/* PANEL HEADER */
+
+.diff-panel-header{
+padding:8px 12px;
+font-size:12px;
+font-weight:700;
+letter-spacing:.5px;
+}
+
+.removed-header{
+background:#fee2e2;
+color:#dc2626;
+}
+
+.added-header{
+background:#dcfce7;
+color:#16a34a;
+}
+
+/* CODE AREA */
+
+.diff-code{
+font-family:"JetBrains Mono","Fira Code",monospace;
+font-size:13px;
+overflow:auto;
+}
+
+/* CODE LINE */
+
+.diff-line{
+display:flex;
+padding:3px 8px;
+white-space:pre;
+}
+
+/* LINE NUMBER */
+
+.line-number{
+width:45px;
+text-align:right;
+padding-right:8px;
+color:#64748b;
+flex-shrink:0;
+}
+
+/* CODE TEXT */
+
+.line-code{
+flex:1;
+}
+
+/* DIFF COLORS */
+
+.diff-line.removed{
+background:#fef2f2;
+}
+
+.diff-line.added{
+background:#ecfdf5;
+}
+
+.diff-line.modified{
+background:#fef9c3;
+}
+/* BUTTON ROW */
+
+.btn-row{
+display:flex;
+gap:10px;
+}
+
+/* BREADCRUMBS */
+
+.custom-breadcrumbs{
+display:flex;
+align-items:center;
+font-size:13px;
+font-weight:500;
+margin-bottom:10px;
+color:#64748b;
+}
+
+.custom-breadcrumbs a{
+color:#475569;
+text-decoration:none;
+padding:4px 8px;
+border-radius:6px;
+transition:all 0.15s ease;
+cursor:pointer;
+}
+
+.custom-breadcrumbs a:hover{
+background:#f1f5f9;
+color:#0f172a;
+}
+
+.custom-breadcrumbs p{
+margin:0;
+padding:4px 8px;
+font-weight:600;
+color:#0f172a;
+}
+
+.custom-breadcrumbs svg{
+color:#94a3b8;
+margin:0 4px;
+}
+
+/* DIFF LEGEND */
+
+.diff-legend{
+display:flex;
+gap:20px;
+align-items:center;
+padding:10px 36px;
+background:#f8fafc;
+border-bottom:1px solid #e2e8f0;
+font-size:13px;
+}
+
+.legend-item{
+display:flex;
+align-items:center;
+gap:6px;
+color:#334155;
+font-weight:500;
+}
+
+.legend-color{
+width:16px;
+height:16px;
+border-radius:4px;
+display:inline-block;
+}
+
+.legend-color.added{
+background:#16a34a;
+}
+
+.legend-color.removed{
+background:#ef4444;
+}
+
+.legend-color.modified{
+background:#eab308;
+}
+
+/* FILE NAME HEADER */
+
+.diff-file-header{
+display:flex;
+align-items:center;
+gap:10px;
+
+padding:12px 20px;
+
+background:white;
+border-bottom:1px solid #e2e8f0;
+
+font-weight:600;
+color:#1e293b;
+}
+
+.diff-file-name{
+font-size:14px;
+font-family:"JetBrains Mono","Fira Code",monospace;
+color:#334155;
+word-break:break-all;
+}
+
+
+.file-nav{
+display:flex;
+align-items:center;
+gap:12px;   /* space between icon and filename */
+flex:1;
+cursor:pointer;
+}
+
+.btn-row{
+display:flex;
+gap:10px;     /* space between buttons */
+margin-top:6px;
+}
+
+.btn-primary{
+background:#2563eb;
+color:white;
+border:none;
+
+padding:8px 12px;
+border-radius:6px;
+
+font-size:12px;
+font-weight:600;
+
+cursor:pointer;
+transition:all 0.15s ease;
+}
+
+.btn-primary:hover{
+background:#1d4ed8;
+}
+
+.btn-outline{
+background:white;
+border:1px solid #cbd5e1;
+
+padding:8px 12px;
+border-radius:6px;
+
+font-size:12px;
+font-weight:600;
+
+cursor:pointer;
+transition:all 0.15s ease;
+}
+
+.btn-outline:hover{
+background:#f1f5f9;
+}
+

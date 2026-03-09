@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/components/Header.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1773035695264,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1773035707320,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,12 +41,9 @@\n                     >\r\n                         New Project\r\n                     </Button>\r\n \r\n-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer', ml: 1 }}>\r\n-                       \r\n-                        <svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#64748b\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"m6 9 6 6 6-6\" /></svg>\r\n-                    </Box>\r\n+                  \r\n                 </Box>\r\n             </Toolbar>\r\n         </AppBar>\r\n     );\r\n"
+                }
+            ],
+            "date": 1773035695263,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\nimport { AppBar, Toolbar, Typography, Box, IconButton, Avatar, InputBase, alpha, styled, Badge, Button } from '@mui/material';\r\nimport { Search as SearchIcon, Bell, Plus } from 'lucide-react';\r\nimport { useNavigate } from 'react-router-dom';\r\n\r\nconst drawerWidth = 260;\r\n\r\nconst Header = () => {\r\n    const navigate = useNavigate();\r\n\r\n    return (\r\n        <AppBar\r\n            position=\"fixed\"\r\n            sx={{\r\n                width: `calc(100% - ${drawerWidth}px)`,\r\n                ml: `${drawerWidth}px`,\r\n                bgcolor: '#fff',\r\n                borderBottom: '1px solid #f1f5f9',\r\n            }}\r\n            elevation={0}\r\n        >\r\n            <Toolbar sx={{ minHeight: '84px !important', px: 4 }}>\r\n                <Box sx={{ flexGrow: 1 }} />\r\n\r\n                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>\r\n                    <Button\r\n                        variant=\"contained\"\r\n                        startIcon={<Plus size={18} />}\r\n                        onClick={() => navigate('/upload')}\r\n                        sx={{\r\n                            bgcolor: '#2563eb',\r\n                            color: '#fff',\r\n                            borderRadius: 2,\r\n                            textTransform: 'none',\r\n                            fontWeight: 600,\r\n                            px: 2,\r\n                            py: 0.75,\r\n                            boxShadow: 'none',\r\n                            '&:hover': { bgcolor: '#1d4ed8', boxShadow: 'none' }\r\n                        }}\r\n                    >\r\n                        New Project\r\n                    </Button>\r\n\r\n                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer', ml: 1 }}>\r\n                       \r\n                        <svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#64748b\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\"><path d=\"m6 9 6 6 6-6\" /></svg>\r\n                    </Box>\r\n                </Box>\r\n            </Toolbar>\r\n        </AppBar>\r\n    );\r\n};\r\n\r\nexport default Header;\r\n"
+        }
+    ]
+}

@@ -1,0 +1,81 @@
+.report-container{
+width:100%;
+max-width:none;
+padding:20px;
+background:white;
+}
+
+.file-diff{
+margin-bottom:35px;
+width:100%;
+}
+
+/* FULL WIDTH SIDE BY SIDE */
+.diff-grid{
+display:grid;
+grid-template-columns: 1fr 1fr;
+gap:10px;
+width:100%;
+}
+
+/* PANELS */
+.diff-panel{
+border:1px solid #e5e7eb;
+width:100%;
+}
+
+/* HEADERS */
+.diff-header{
+padding:8px 10px;
+font-weight:700;
+font-size:12px;
+letter-spacing:.4px;
+}
+
+.diff-header.original{
+background:#fee2e2;
+color:#dc2626;
+}
+
+.diff-header.fixed{
+background:#dcfce7;
+color:#16a34a;
+}
+
+/* CODE LINE */
+.code-line{
+display:flex;
+font-family:"JetBrains Mono", monospace;
+font-size:11px;
+line-height:1.5;
+}
+
+.line-number{
+width:45px;
+background:#f1f5f9;
+text-align:right;
+padding:3px 6px;
+color:#64748b;
+flex-shrink:0;
+}
+
+.line-code{
+flex:1;
+padding:3px 8px;
+white-space:pre;
+overflow:hidden;
+}
+
+/* DIFF COLORS */
+
+.code-line.added{
+background:#ecfdf5;
+}
+
+.code-line.removed{
+background:#fef2f2;
+}
+
+.code-line.modified{
+background:#fef9c3;
+}

@@ -1,0 +1,114 @@
+.report-wrapper{
+padding:30px;
+background:#f8fafc;
+}
+
+.download-btn{
+background:#2563eb;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:6px;
+margin-bottom:20px;
+cursor:pointer;
+}
+
+.report-container{
+background:white;
+padding:40px;
+font-family:system-ui;
+}
+
+/* HEADER */
+
+.report-header{
+border-bottom:2px solid #e5e7eb;
+margin-bottom:30px;
+}
+
+.meta{
+display:flex;
+gap:40px;
+}
+
+/* SUMMARY */
+
+.summary-table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:40px;
+}
+
+.summary-table th,
+.summary-table td{
+border:1px solid #e5e7eb;
+padding:8px;
+}
+
+/* FILE */
+
+.file-diff{
+margin-bottom:40px;
+}
+
+.file-title{
+margin-bottom:10px;
+}
+
+/* DIFF */
+
+.diff-container{
+display:flex;
+gap:12px;
+}
+
+.diff-column{
+flex:1;
+border:1px solid #e5e7eb;
+font-family:"JetBrains Mono", monospace;
+font-size:12px;
+}
+
+.diff-header{
+padding:6px 10px;
+font-weight:700;
+}
+
+.removed-header{
+background:#fee2e2;
+color:#dc2626;
+}
+
+.added-header{
+background:#dcfce7;
+color:#16a34a;
+}
+
+/* CODE LINE */
+
+.code-line{
+display:flex;
+padding:3px 6px;
+white-space:pre;
+}
+
+.line-number{
+width:45px;
+text-align:right;
+padding-right:8px;
+color:#64748b;
+}
+
+.code{
+flex:1;
+}
+
+/* COLORS */
+
+.code-line.removed{
+background:#fef2f2;
+}
+
+.code-line.added{
+background:#ecfdf5;
+}

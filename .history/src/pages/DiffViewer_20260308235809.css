@@ -1,0 +1,116 @@
+/* RIGHT PANEL */
+
+.diff-content{
+flex:1;
+display:flex;
+flex-direction:column;
+background:#f8fafc;
+padding:20px;
+overflow:hidden;
+}
+
+/* FILE HEADER */
+
+.diff-file-header{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 16px;
+background:white;
+border:1px solid #e5e7eb;
+border-radius:8px;
+margin-bottom:12px;
+font-weight:600;
+}
+
+.diff-file-name{
+font-size:14px;
+font-weight:600;
+color:#1e293b;
+}
+
+/* SIDE BY SIDE DIFF */
+
+.diff-side-container{
+display:flex;
+gap:12px;
+flex:1;
+overflow:auto;
+}
+
+/* DIFF PANEL */
+
+.diff-panel{
+flex:1;
+background:white;
+border:1px solid #e5e7eb;
+border-radius:8px;
+display:flex;
+flex-direction:column;
+min-width:0;
+}
+
+/* PANEL HEADER */
+
+.diff-panel-header{
+padding:8px 12px;
+font-size:12px;
+font-weight:700;
+letter-spacing:.5px;
+}
+
+.removed-header{
+background:#fee2e2;
+color:#dc2626;
+}
+
+.added-header{
+background:#dcfce7;
+color:#16a34a;
+}
+
+/* CODE AREA */
+
+.diff-code{
+font-family:"JetBrains Mono","Fira Code",monospace;
+font-size:13px;
+overflow:auto;
+}
+
+/* CODE LINE */
+
+.diff-line{
+display:flex;
+padding:3px 8px;
+white-space:pre;
+}
+
+/* LINE NUMBER */
+
+.line-number{
+width:45px;
+text-align:right;
+padding-right:8px;
+color:#64748b;
+flex-shrink:0;
+}
+
+/* CODE TEXT */
+
+.line-code{
+flex:1;
+}
+
+/* DIFF COLORS */
+
+.diff-line.removed{
+background:#fef2f2;
+}
+
+.diff-line.added{
+background:#ecfdf5;
+}
+
+.diff-line.modified{
+background:#fef9c3;
+}

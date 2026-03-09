@@ -1,0 +1,60 @@
+.report-wrapper{
+padding:30px;
+background:#f8fafc;
+}
+
+.download-btn{
+background:#2563eb;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:6px;
+margin-bottom:20px;
+cursor:pointer;
+}
+
+.report-container{
+background:white;
+padding:30px;
+}
+
+.summary-table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:40px;
+}
+
+.summary-table th,
+.summary-table td{
+border:1px solid #e5e7eb;
+padding:8px;
+}
+
+.file-diff{
+margin-bottom:40px;
+}
+
+.unified-diff{
+border:1px solid #e5e7eb;
+font-family:"JetBrains Mono",monospace;
+font-size:12px;
+}
+
+.diff-line{
+display:flex;
+padding:3px 10px;
+white-space:pre;
+}
+
+.symbol{
+width:20px;
+font-weight:bold;
+}
+
+.diff-line.added{
+background:#ecfdf5;
+}
+
+.diff-line.removed{
+background:#fef2f2;
+}
