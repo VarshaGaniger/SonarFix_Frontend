@@ -23,7 +23,7 @@ const scanId = params.scanId || localStorage.getItem("scanId");
   //  Poll backend every 2 sec
   useEffect(() => {
     if (!scanId) {
-      axios.get("http://localhost:9090/api/scan/latest")
+      axios.get("http://localhost:8080/api/scan/latest")
         .then(res => {
           if (res.data.scanId) {
             navigate("/scan-status/" + res.data.scanId, { replace: true });
@@ -43,7 +43,7 @@ const scanId = params.scanId || localStorage.getItem("scanId");
     intervalRef.current = setInterval(async () => {
       try {
         const res = await axios.get(
-          `http://localhost:9090/api/scan/status/${scanId}`
+          `http://localhost:8080/api/scan/status/${scanId}`
         );
         const backendStatus = res.data.status;
         setStatus(backendStatus);

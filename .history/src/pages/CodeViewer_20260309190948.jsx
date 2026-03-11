@@ -98,7 +98,7 @@ useEffect(() => {
     const fetchProject = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:9090/api/sonar/projects"
+          "http://localhost:8080/api/sonar/projects"
         );
 
         const project = res.data.find(

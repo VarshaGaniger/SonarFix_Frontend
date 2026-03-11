@@ -43,7 +43,7 @@ const scanId = params.scanId || localStorage.getItem("scanId");
     intervalRef.current = setInterval(async () => {
       try {
         const res = await axios.get(
-          `http://localhost:9090/api/scan/status/${scanId}`
+          `http://localhost:8080/api/scan/status/${scanId}`
         );
         const backendStatus = res.data.status;
         setStatus(backendStatus);

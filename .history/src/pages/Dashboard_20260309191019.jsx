@@ -63,7 +63,7 @@ const Dashboard = () => {
                 const [summaryRes, severityRes, projectsRes] = await Promise.all([
                     axios.get('http://localhost:9090/api/dashboard/summary'),
                     axios.get('http://localhost:9090/api/dashboard/issues-by-severity'),
-                    axios.get('http://localhost:9090/api/sonar/projects')
+                    axios.get('http://localhost:8080/api/sonar/projects')
                 ]);
 
                 setSummary(summaryRes.data);

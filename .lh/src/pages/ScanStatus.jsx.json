@@ -3,11 +3,15 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1772963090232,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1773063857445,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,12 +19,12 @@\n     linesOfCode: 0,\r\n     issuesFound: 0\r\n   });\r\n \r\n-  // 🔥 Poll backend every 2 sec\r\n+  //  Poll backend every 2 sec\r\n   useEffect(() => {\r\n     if (!scanId) {\r\n-      axios.get(\"http://localhost:8080/api/scan/latest\")\r\n+      axios.get(\"http://localhost:9090/api/scan/latest\")\r\n         .then(res => {\r\n           if (res.data.scanId) {\r\n             navigate(\"/scan-status/\" + res.data.scanId, { replace: true });\r\n           } else {\r\n@@ -42,9 +42,9 @@\n \r\n     intervalRef.current = setInterval(async () => {\r\n       try {\r\n         const res = await axios.get(\r\n-          `http://localhost:8080/api/scan/status/${scanId}`\r\n+          `http://localhost:9090/api/scan/status/${scanId}`\r\n         );\r\n         const backendStatus = res.data.status;\r\n         setStatus(backendStatus);\r\n \r\n"
                 }
             ],
             "date": 1772963090232,

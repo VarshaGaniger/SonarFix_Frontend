@@ -214,7 +214,7 @@ const applySelected = async () => {
     setFixLoading(true);
 
     await axios.post(
-      "http://localhost:9090/api/fix/apply/selected",
+      "http://localhost:8080/api/fix/apply/selected",
       selectedIssues,
       { params: { scanId } }
     );
@@ -242,7 +242,7 @@ const applyAll = async () => {
     setFixLoading(true);
 
     await axios.post(
-      `http://localhost:9090/api/fix/apply/${scanId}`
+      `http://localhost:8080/api/fix/apply/${scanId}`
     );
 
     navigate(`/projects/${projectKey}/summary`);

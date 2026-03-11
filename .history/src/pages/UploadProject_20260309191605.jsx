@@ -145,7 +145,7 @@ const projectKey = projectPath.split(/[\\/]/).pop();
 localStorage.setItem("projectKey", projectKey);
       // ================= START SCAN =================
       const scanResponse = await axios.post(
-        "http://localhost:9090/api/scan/start",
+        "http://localhost:8080/api/scan/start",
         null,
         { params: { projectPath } }
       );

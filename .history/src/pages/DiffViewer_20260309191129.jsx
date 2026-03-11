@@ -242,7 +242,7 @@ const applyAll = async () => {
     setFixLoading(true);
 
     await axios.post(
-      `http://localhost:9090/api/fix/apply/${scanId}`
+      `http://localhost:9080/api/fix/apply/${scanId}`
     );
 
     navigate(`/projects/${projectKey}/summary`);

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/pages/Dashboard.css",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1773163539887,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1773163539887,
+            "name": "Commit-0",
+            "content": "/* Dashboard.css */\n.stat-card {\n    border-radius: 16px !important;\n    border: 1px solid #e2e8f0;\n    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;\n    transition: transform 0.2s ease, box-shadow 0.2s ease;\n}\n\n.stat-card:hover {\n    transform: translateY(-2px);\n    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;\n}\n\n.trend-badge {\n    padding: 4px 8px;\n    border-radius: 100px;\n    font-size: 0.75rem;\n    font-weight: 600;\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n}\n\n.trend-up-success {\n    background-color: #dcfce7;\n    color: #166534;\n}\n\n.trend-up-warning {\n    background-color: #fef9c3;\n    color: #854d0e;\n}\n\n.trend-down-neutral {\n    background-color: #f1f5f9;\n    color: #475569;\n}\n\n.dashboard-table-container {\n    border-radius: 16px !important;\n    border: 1px solid #e2e8f0;\n    overflow: hidden;\n}\n\n.status-badge {\n    padding: 4px 12px;\n    border-radius: 100px;\n    font-size: 0.75rem;\n    font-weight: 600;\n    display: inline-block;\n}\n\n.status-passed {\n    background-color: #dcfce7;\n    color: #166534;\n}\n\n.status-failed {\n    background-color: #fee2e2;\n    color: #991b1b;\n}\n\n.status-running {\n    background-color: #e0f2fe;\n    color: #0369a1;\n}\n\n.code-badge {\n    font-family: 'Fira Code', monospace;\n    background: #f1f5f9;\n    padding: 2px 6px;\n    border-radius: 4px;\n    font-size: 0.85rem;\n    color: #475569;\n}"
+        }
+    ]
+}

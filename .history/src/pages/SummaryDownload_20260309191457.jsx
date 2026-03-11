@@ -90,11 +90,11 @@ const scanId =
     try {
 
       const report = await axios.get(
-        `http://localhost:9090/api/fix/report/${scanId}`
+        `http://localhost:8080/api/fix/report/${scanId}`
       );
 
       const diff = await axios.get(
-        `http://localhost:9090/api/diff/project/${scanId}`
+        `http://localhost:8080/api/diff/project/${scanId}`
       );
 
       navigate(`/report/${scanId}`, {

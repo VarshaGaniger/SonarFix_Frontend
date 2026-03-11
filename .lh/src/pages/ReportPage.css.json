@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 6,
+            "activePatchIndex": 7,
             "patches": [
                 {
                     "date": 1772987998015,
@@ -32,6 +32,10 @@
                 {
                     "date": 1772995491405,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,26 +14,11 @@\n }\n \n .report-container{\n background:white;\n-padding:40px;\n-font-family:system-ui;\n+padding:30px;\n }\n \n-/* HEADER */\n-\n-.report-header{\n-border-bottom:2px solid #e5e7eb;\n-margin-bottom:30px;\n-}\n-\n-.meta{\n-display:flex;\n-gap:40px;\n-}\n-\n-/* SUMMARY */\n-\n .summary-table{\n width:100%;\n border-collapse:collapse;\n margin-bottom:40px;\n@@ -44,71 +29,32 @@\n border:1px solid #e5e7eb;\n padding:8px;\n }\n \n-/* FILE */\n-\n .file-diff{\n margin-bottom:40px;\n }\n \n-.file-title{\n-margin-bottom:10px;\n-}\n-\n-/* DIFF */\n-\n-.diff-container{\n-display:flex;\n-gap:12px;\n-}\n-\n-.diff-column{\n-flex:1;\n+.unified-diff{\n border:1px solid #e5e7eb;\n-font-family:\"JetBrains Mono\", monospace;\n+font-family:\"JetBrains Mono\",monospace;\n font-size:12px;\n }\n \n-.diff-header{\n-padding:6px 10px;\n-font-weight:700;\n-}\n-\n-.removed-header{\n-background:#fee2e2;\n-color:#dc2626;\n-}\n-\n-.added-header{\n-background:#dcfce7;\n-color:#16a34a;\n-}\n-\n-/* CODE LINE */\n-\n-.code-line{\n+.diff-line{\n display:flex;\n-padding:3px 6px;\n+padding:3px 10px;\n white-space:pre;\n }\n \n-.line-number{\n-width:45px;\n-text-align:right;\n-padding-right:8px;\n-color:#64748b;\n+.symbol{\n+width:20px;\n+font-weight:bold;\n }\n \n-.code{\n-flex:1;\n+.diff-line.added{\n+background:#ecfdf5;\n }\n \n-/* COLORS */\n-\n-.code-line.removed{\n+.diff-line.removed{\n background:#fef2f2;\n-}\n-\n-.code-line.added{\n-background:#ecfdf5;\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1773163645907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,60 @@\n+.report-wrapper{\n+padding:30px;\n+background:#f8fafc;\n+}\n+\n+.download-btn{\n+background:#2563eb;\n+color:white;\n+border:none;\n+padding:10px 16px;\n+border-radius:6px;\n+margin-bottom:20px;\n+cursor:pointer;\n+}\n+\n+.report-container{\n+background:white;\n+padding:30px;\n+}\n+\n+.summary-table{\n+width:100%;\n+border-collapse:collapse;\n+margin-bottom:40px;\n+}\n+\n+.summary-table th,\n+.summary-table td{\n+border:1px solid #e5e7eb;\n+padding:8px;\n+}\n+\n+.file-diff{\n+margin-bottom:40px;\n+}\n+\n+.unified-diff{\n+border:1px solid #e5e7eb;\n+font-family:\"JetBrains Mono\",monospace;\n+font-size:12px;\n+}\n+\n+.diff-line{\n+display:flex;\n+padding:3px 10px;\n+white-space:pre;\n+}\n+\n+.symbol{\n+width:20px;\n+font-weight:bold;\n+}\n+\n+.diff-line.added{\n+background:#ecfdf5;\n+}\n+\n+.diff-line.removed{\n+background:#fef2f2;\n+}\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1772987998015,

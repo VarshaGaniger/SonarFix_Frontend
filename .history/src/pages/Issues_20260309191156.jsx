@@ -79,7 +79,7 @@ const projectKey = params.projectKey || localStorage.getItem("projectKey");
   const fetchProject = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9090/api/sonar/projects"
+        "http://localhost:8080/api/sonar/projects"
       );
 
       const project = res.data.find(
@@ -114,7 +114,8 @@ useEffect(() => {
 
       try {
         const baseUrl =
-          `http://localhost:9090/api/scan/${encodeURIComponent(projectKey)}/issues`;
+          `http://localhost:9090
+          /api/scan/${encodeURIComponent(projectKey)}/issues`;
 
         const [
           mainRes,

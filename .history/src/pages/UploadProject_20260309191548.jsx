@@ -91,7 +91,7 @@ const UploadProject = () => {
       // ================= Git Upload =================
       else if (repoUrl.trim() !== "") {
         uploadResponse = await axios.post(
-          "http://localhost:9090/api/project/upload-github",
+          "http://localhost:8080/api/project/upload-github",
           null,
           { params: { repoUrl } }
         );
@@ -100,7 +100,7 @@ const UploadProject = () => {
       // ================= Local Upload =================
       else if (localPath.trim() !== "") {
         uploadResponse = await axios.post(
-          "http://localhost:9090/api/project/upload-local",
+          "http://localhost:8080/api/project/upload-local",
           null,
           { params: { localPath } }
         );
@@ -145,7 +145,7 @@ const projectKey = projectPath.split(/[\\/]/).pop();
 localStorage.setItem("projectKey", projectKey);
       // ================= START SCAN =================
       const scanResponse = await axios.post(
-        "http://localhost:9090/api/scan/start",
+        "http://localhost:8080/api/scan/start",
         null,
         { params: { projectPath } }
       );

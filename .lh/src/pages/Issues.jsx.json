@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 1,
+            "activePatchIndex": 4,
             "patches": [
                 {
                     "date": 1772963317526,
@@ -12,6 +12,18 @@
                 {
                     "date": 1772963360288,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -98,9 +98,13 @@\n   fetchProject();\r\n \r\n }, [projectKey]);\r\n \r\n-\r\n+useEffect(() => {\r\n+  if (projectKey) {\r\n+    localStorage.setItem(\"projectKey\", projectKey);\r\n+  }\r\n+}, [projectKey]);\r\n   /* ================= FETCH LOGIC ================= */\r\n \r\n   useEffect(() => {\r\n     if (!projectKey) return;\r\n"
+                },
+                {
+                    "date": 1773063712998,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -113,9 +113,9 @@\n       setLoading(true);\r\n \r\n       try {\r\n         const baseUrl =\r\n-          `http://localhost:8080/api/scan/${encodeURIComponent(projectKey)}/issues`;\r\n+          `http://localhost:9080/api/scan/${encodeURIComponent(projectKey)}/issues`;\r\n \r\n         const [\r\n           mainRes,\r\n           severityRes,\r\n"
+                },
+                {
+                    "date": 1773063719895,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -113,9 +113,9 @@\n       setLoading(true);\r\n \r\n       try {\r\n         const baseUrl =\r\n-          `http://localhost:9080/api/scan/${encodeURIComponent(projectKey)}/issues`;\r\n+          `http://localhost:9090/api/scan/${encodeURIComponent(projectKey)}/issues`;\r\n \r\n         const [\r\n           mainRes,\r\n           severityRes,\r\n"
+                },
+                {
+                    "date": 1773063725745,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -78,9 +78,9 @@\n \r\n   const fetchProject = async () => {\r\n     try {\r\n       const res = await axios.get(\r\n-        \"http://localhost:8080/api/sonar/projects\"\r\n+        \"http://localhost:9080/api/sonar/projects\"\r\n       );\r\n \r\n       const project = res.data.find(\r\n         p => p.projectKey === projectKey\r\n"
                 }
             ],
             "date": 1772963317526,

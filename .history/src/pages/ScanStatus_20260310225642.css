@@ -1,0 +1,130 @@
+.scan-status-page {
+    padding: 32px;
+    background-color: #ffffff;
+    min-height: calc(100vh - 84px);
+}
+
+.status-chip-box {
+    display: flex;
+    align-items: center;
+    background-color: #eff6ff;
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1px solid #dbeafe;
+}
+
+.progress-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 40px 0 60px;
+}
+
+.circular-progress-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.circular-progress-svg {
+    transform: rotate(-90deg);
+}
+
+.progress-bg {
+    fill: none;
+    stroke: #f1f5f9;
+    stroke-width: 14;
+}
+
+.progress-bar {
+    fill: none;
+    stroke: #2563eb;
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 565;
+    transition: stroke-dashoffset 1s ease-in-out;
+}
+
+.progress-text-overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.active-task-card {
+    background: white;
+    padding: 24px 32px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    width: 100%;
+}
+
+.metric-card {
+    border-radius: 16px !important;
+    border: 1px solid #f1f5f9 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.metric-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.system-log-section {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.code-inline {
+    background-color: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-family: monospace;
+    color: #475569;
+}
+
+.spinning {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

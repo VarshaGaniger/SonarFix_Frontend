@@ -55,7 +55,7 @@ useEffect(() => {
       setLoading(true);
 
       const response = await axios.get(
-        `http://localhost:9090/api/scan/${projectKey}/issues/all`,
+        `http://localhost:8080/api/scan/${projectKey}/issues/all`,
         { params: { page: 1, pageSize: 200 } }
       );
 
@@ -98,7 +98,7 @@ useEffect(() => {
     const fetchProject = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:9090/api/sonar/projects"
+          "http://localhost:8080/api/sonar/projects"
         );
 
         const project = res.data.find(

@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 17,
+            "activePatchIndex": 19,
             "patches": [
                 {
                     "date": 1772963294130,
@@ -76,6 +76,14 @@
                 {
                     "date": 1773035582477,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -138,11 +138,21 @@\n                         icon={<FolderOpen color=\"#0066ff\" size={24} />}\r\n                         iconBg=\"#eff6ff\"\r\n                     />\r\n                 </Grid>\r\n-              \r\n                 <Grid item xs={12} sm={6} md={3}>\r\n                     <StatCard\r\n+                        title=\"TOTAL ISSUES\"\r\n+                        value={summary?.totalIssues || 0}\r\n+                        subtext=\"detected across code\"\r\n+                        trendValue=\"0%\"\r\n+                        trend=\"trend-up-warning\"\r\n+                        icon={<Bug color=\"#ef4444\" size={24} />}\r\n+                        iconBg=\"#fef2f2\"\r\n+                    />\r\n+                </Grid>\r\n+                <Grid item xs={12} sm={6} md={3}>\r\n+                    <StatCard\r\n                         title=\"TOTAL SCANS\"\r\n                         value={summary?.totalScans || 0}\r\n                         subtext=\"analysis runs\"\r\n                         trendValue=\"0%\"\r\n"
+                },
+                {
+                    "date": 1773063617618,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -61,9 +61,9 @@\n             try {\r\n                 setLoading(true);\r\n                 const [summaryRes, severityRes, projectsRes] = await Promise.all([\r\n                     axios.get('http://localhost:9090/api/dashboard/summary'),\r\n-                    axios.get('http://localhost:8080/api/dashboard/issues-by-severity'),\r\n+                    axios.get('http://localhost:0080/api/dashboard/issues-by-severity'),\r\n                     axios.get('http://localhost:8080/api/sonar/projects')\r\n                 ]);\r\n \r\n                 setSummary(summaryRes.data);\r\n"
+                },
+                {
+                    "date": 1773063619667,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -61,9 +61,9 @@\n             try {\r\n                 setLoading(true);\r\n                 const [summaryRes, severityRes, projectsRes] = await Promise.all([\r\n                     axios.get('http://localhost:9090/api/dashboard/summary'),\r\n-                    axios.get('http://localhost:9080/api/dashboard/issues-by-severity'),\r\n+                    axios.get('http://localhost:900/api/dashboard/issues-by-severity'),\r\n                     axios.get('http://localhost:8080/api/sonar/projects')\r\n                 ]);\r\n \r\n                 setSummary(summaryRes.data);\r\n"
                 }
             ],
             "date": 1772963294130,
