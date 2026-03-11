@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 7,
+            "activePatchIndex": 15,
             "patches": [
                 {
                     "date": 1772987998015,
@@ -36,6 +36,38 @@
                 {
                     "date": 1773163645907,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,60 @@\n+.report-wrapper{\n+padding:30px;\n+background:#f8fafc;\n+}\n+\n+.download-btn{\n+background:#2563eb;\n+color:white;\n+border:none;\n+padding:10px 16px;\n+border-radius:6px;\n+margin-bottom:20px;\n+cursor:pointer;\n+}\n+\n+.report-container{\n+background:white;\n+padding:30px;\n+}\n+\n+.summary-table{\n+width:100%;\n+border-collapse:collapse;\n+margin-bottom:40px;\n+}\n+\n+.summary-table th,\n+.summary-table td{\n+border:1px solid #e5e7eb;\n+padding:8px;\n+}\n+\n+.file-diff{\n+margin-bottom:40px;\n+}\n+\n+.unified-diff{\n+border:1px solid #e5e7eb;\n+font-family:\"JetBrains Mono\",monospace;\n+font-size:12px;\n+}\n+\n+.diff-line{\n+display:flex;\n+padding:3px 10px;\n+white-space:pre;\n+}\n+\n+.symbol{\n+width:20px;\n+font-weight:bold;\n+}\n+\n+.diff-line.added{\n+background:#ecfdf5;\n+}\n+\n+.diff-line.removed{\n+background:#fef2f2;\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1773229598104,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -57,64 +57,11 @@\n \n .diff-line.removed{\n background:#fef2f2;\n }\n-.report-wrapper{\n-padding:30px;\n-background:#f8fafc;\n-}\n \n-.download-btn{\n-background:#2563eb;\n-color:white;\n-border:none;\n-padding:10px 16px;\n-border-radius:6px;\n-margin-bottom:20px;\n-cursor:pointer;\n-}\n-\n-.report-container{\n-background:white;\n-padding:30px;\n-}\n-\n-.summary-table{\n-width:100%;\n-border-collapse:collapse;\n-margin-bottom:40px;\n-}\n-\n .summary-table th,\n .summary-table td{\n border:1px solid #e5e7eb;\n padding:8px;\n-}\n-\n-.file-diff{\n-margin-bottom:40px;\n-}\n-\n-.unified-diff{\n-border:1px solid #e5e7eb;\n-font-family:\"JetBrains Mono\",monospace;\n-font-size:12px;\n-}\n-\n-.diff-line{\n-display:flex;\n-padding:3px 10px;\n-white-space:pre;\n-}\n-\n-.symbol{\n-width:20px;\n-font-weight:bold;\n-}\n-\n-.diff-line.added{\n-background:#ecfdf5;\n-}\n-\n-.diff-line.removed{\n-background:#fef2f2;\n+text-align:center;\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1773229613193,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -63,5 +63,11 @@\n .summary-table td{\n border:1px solid #e5e7eb;\n padding:8px;\n text-align:center;\n+}\n+\n+.summary-table{\n+width:60%;\n+border-collapse:collapse;\n+margin:0 auto 40px auto;\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1773229625779,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,13 +23,8 @@\n border-collapse:collapse;\n margin-bottom:40px;\n }\n \n-.summary-table th,\n-.summary-table td{\n-border:1px solid #e5e7eb;\n-padding:8px;\n-}\n \n .file-diff{\n margin-bottom:40px;\n }\n"
+                },
+                {
+                    "date": 1773229637852,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,15 +17,9 @@\n background:white;\n padding:30px;\n }\n \n-.summary-table{\n-width:100%;\n-border-collapse:collapse;\n-margin-bottom:40px;\n-}\n \n-\n .file-diff{\n margin-bottom:40px;\n }\n \n"
+                },
+                {
+                    "date": 1773229651060,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,20 @@\n background:white;\n padding:30px;\n }\n \n+.summary-table{\n+width:100%;\n+border-collapse:collapse;\n+margin-bottom:40px;\n+}\n \n+.summary-table th,\n+.summary-table td{\n+border:1px solid #e5e7eb;\n+padding:8px;\n+}\n+\n .file-diff{\n margin-bottom:40px;\n }\n \n"
+                },
+                {
+                    "date": 1773229657923,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,13 +23,8 @@\n border-collapse:collapse;\n margin-bottom:40px;\n }\n \n-.summary-table th,\n-.summary-table td{\n-border:1px solid #e5e7eb;\n-padding:8px;\n-}\n \n .file-diff{\n margin-bottom:40px;\n }\n@@ -65,9 +60,4 @@\n padding:8px;\n text-align:center;\n }\n \n-.summary-table{\n-width:60%;\n-border-collapse:collapse;\n-margin:0 auto 40px auto;\n-}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1773229693754,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -57,7 +57,6 @@\n .summary-table th,\n .summary-table td{\n border:1px solid #e5e7eb;\n padding:8px;\n-text-align:center;\n }\n \n"
+                },
+                {
+                    "date": 1773229770924,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -57,6 +57,7 @@\n .summary-table th,\n .summary-table td{\n border:1px solid #e5e7eb;\n padding:8px;\n+text-align:left;\n }\n \n"
                 }
             ],
             "date": 1772987998015,

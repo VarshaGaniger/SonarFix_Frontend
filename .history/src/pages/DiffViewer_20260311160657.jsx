@@ -100,11 +100,9 @@ const mapped = diffRes.data
         setOpenFiles(fileMap);
 
         const selectedMap = {};
-issueList.forEach(i => {
-  if (i.autoFixable) {
-    selectedMap[i.id] = true;
-  }
-});
+        issueList.forEach(i => {
+          selectedMap[i.id] = true;
+        });
 
         setSelectedFixes(selectedMap);
 

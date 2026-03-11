@@ -160,7 +160,7 @@ return (
 <Grid container spacing={3}>
 
   {/* Issues by Severity Chart */}
-  <Grid item xs={12} md={4}>
+  <Grid item xs={12} md={6}>
     <Card className="stat-card" sx={{ height: "100%", minHeight: 450 }}>
       <CardContent
         sx={{
@@ -203,14 +203,14 @@ return (
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "center",
-            gap: 2,
+            gap: 4,
             mt: "auto"
           }}
         >
           {severityData.map((item) => (
             <Box
               key={item.name}
-              sx={{ display: "flex", alignItems: "center", gap: 2 }}
+              sx={{ display: "flex", alignItems: "center", gap: 4 }}
             >
               <Box
                 sx={{
@@ -235,7 +235,7 @@ return (
   </Grid>
 
   {/* Recent Projects Table */}
-  <Grid item xs={12} md={8}>
+  <Grid item xs={12} md={}>
     <Card className="stat-card" sx={{ height: "100%", minHeight: 450 }}>
       <CardContent sx={{ p: 0 }}>
         <Box

@@ -24,6 +24,11 @@ border-collapse:collapse;
 margin-bottom:40px;
 }
 
+.summary-table th,
+.summary-table td{
+border:1px solid #e5e7eb;
+padding:8px;
+}
 
 .file-diff{
 margin-bottom:40px;
@@ -58,6 +63,5 @@ background:#fef2f2;
 .summary-table td{
 border:1px solid #e5e7eb;
 padding:8px;
-text-align:left;
+text-align:center;
 }
-

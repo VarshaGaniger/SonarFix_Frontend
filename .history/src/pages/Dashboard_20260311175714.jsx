@@ -210,7 +210,7 @@ return (
           {severityData.map((item) => (
             <Box
               key={item.name}
-              sx={{ display: "flex", alignItems: "center", gap: 2 }}
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
             >
               <Box
                 sx={{

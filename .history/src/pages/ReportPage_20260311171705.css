@@ -58,6 +58,11 @@ background:#fef2f2;
 .summary-table td{
 border:1px solid #e5e7eb;
 padding:8px;
-text-align:left;
+text-align:center;
 }
 
+.summary-table{
+width:60%;
+border-collapse:collapse;
+margin:0 auto 40px auto;
+}

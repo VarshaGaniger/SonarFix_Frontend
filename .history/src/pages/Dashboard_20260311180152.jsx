@@ -181,20 +181,26 @@ return (
         </Box>
 
         <Box sx={{ width: "100%", height: 320 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={severityData} barSize={60}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
+<ResponsiveContainer width="100%" height="100%">
+  <BarChart
+    data={severityData}
+    barSize={80}           
+    barCategoryGap="35%"   
+    barGap={30}           
+  >
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis dataKey="name" />
+    <YAxis />
+    <Tooltip />
 
-              <Bar dataKey="value">
-                {severityData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+    <Bar dataKey="value" radius={[6,6,0,0]}>
+      {severityData.map((entry, index) => (
+        <Cell key={`cell-${index}`} fill={entry.color} />
+      ))}
+    </Bar>
+
+  </BarChart>
+</ResponsiveContainer>
         </Box>
 
         {/* Legend */}
@@ -210,7 +216,7 @@ return (
           {severityData.map((item) => (
             <Box
               key={item.name}
-              sx={{ display: "flex", alignItems: "center", gap: 2 }}
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
             >
               <Box
                 sx={{

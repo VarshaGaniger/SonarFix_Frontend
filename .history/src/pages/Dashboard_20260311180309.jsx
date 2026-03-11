@@ -203,14 +203,14 @@ return (
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "center",
-            gap: 2,
+            gap: 8,
             mt: "auto"
           }}
         >
           {severityData.map((item) => (
             <Box
               key={item.name}
-              sx={{ display: "flex", alignItems: "center", gap: 2 }}
+              sx={{ display: "flex", alignItems: "center", gap: 8 }}
             >
               <Box
                 sx={{
@@ -259,7 +259,7 @@ return (
         </Box>
 
         <TableContainer>
-          <Table sx={{ minWidth: 650 }}>
+          <Table sx={{ minWidth: 450 }}>
             <TableHead sx={{ bgcolor: "#f8fafc" }}>
               <TableRow>
                 <TableCell align="center" sx={{ fontWeight: 700 }}>

@@ -32,3 +32,17 @@
   align-items: center;
   justify-content: center;
 }
+.MuiTableHead-root {
+  background: #f8fafc;
+}
+
+.MuiTableCell-head {
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.08em;
+}
+
+.MuiTableRow-root:hover {
+  background: #f8fafc;
+}
