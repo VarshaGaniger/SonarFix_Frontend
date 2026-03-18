@@ -421,3 +421,14 @@ background:#f1f5f9;
   padding: 2px 6px;
   border-radius: 4px;
 }
+.code-line.added {
+  background-color: #d4f8d4;
+}
+
+.code-line.removed {
+  background-color: #ffd6d6;
+}
+
+.code-line.modified {
+  background-color: #fff3cd;
+}
