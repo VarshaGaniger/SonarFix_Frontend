@@ -11,7 +11,7 @@ import {
   Chip
 } from "@mui/material";
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Wand2 } from "lucide-react";
 
 const SEVERITIES = ["BLOCKER", "CRITICAL", "MAJOR", "MINOR"];
 const QUALITIES = ["Security", "Reliability", "Maintainability"];
@@ -44,6 +44,7 @@ const projectKey = params.projectKey || localStorage.getItem("projectKey");
   const [ruleOpen, setRuleOpen] = useState(true);
   const [severityOpen, setSeverityOpen] = useState(true);
   const [qualityOpen, setQualityOpen] = useState(true);
+  const [isFixingRule, setIsFixingRule] = useState(null); // stores ruleId being fixed
 
   /* ================= PARAM BUILDER ================= */
 
@@ -247,6 +248,37 @@ useEffect(() => {
     setPage(1);
   };
 
+  const handleFixByRule = async (e, ruleId) => {
+    e.stopPropagation();
+
+    // Use scanId from the API response primarily
+    const scanId = data?.scanId || projectKey;
+
+    if (!window.confirm(`Are you sure you want to fix all auto-fixable issues for rule ${ruleId}?`)) {
+      return;
+    }
+
+    setIsFixingRule(ruleId);
+
+    try {
+      const resp = await axios.post(`http://localhost:9090/api/fix/apply/rule?scanId=${scanId}&ruleId=${ruleId}`);
+      
+      if (resp.status === 200) {
+        if (resp.data.fixesApplied > 0) {
+          alert(`Successfully applied ${resp.data.fixesApplied} fixes for rule ${ruleId}!`);
+          window.location.reload();
+        } else {
+          alert(`No new fixes were applied for rule ${ruleId}. The issues may already be fixed, or they may require manual intervention.`);
+        }
+      }
+    } catch (err) {
+      console.error("Fix by Rule failed", err);
+      alert("Failed to apply rule-level fixes: " + (err.response?.data || err.message));
+    } finally {
+      setIsFixingRule(null);
+    }
+  };
+
   /* ================= UI ================= */
 
   return (
@@ -355,8 +387,28 @@ useEffect(() => {
                           }`}
                         onClick={() => toggleRule(rule)}
                       >
-                        {rule}
-                        <span>{stableRuleCounts[rule] ?? 0}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: 0 }}>
+                          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            {rule}
+                          </span>
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <span className="count-badge">
+                            {stableRuleCounts[rule]?.count ?? 0}
+                          </span>
+
+                          {stableRuleCounts[rule]?.autoFixable && (
+                            <button
+                              className={`rule-fix-btn ${isFixingRule === rule ? "fixing" : ""}`}
+                              onClick={(e) => handleFixByRule(e, rule)}
+                              title="Fix all for this rule"
+                              disabled={isFixingRule !== null}
+                            >
+                              <Wand2 size={14} />
+                            </button>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
