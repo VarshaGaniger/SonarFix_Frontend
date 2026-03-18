@@ -1,8 +1,10 @@
-.diff-viewer-page{
+1. .diff-viewer-page{
 background:#f8fafc;
 min-height:100vh;
 display:flex;
 flex-direction:column;
+overflow:hidden;
+width:100%;
 }
 
 /* HEADER */
@@ -27,12 +29,14 @@ gap:12px;
 margin-top:4px;
 }
 
+/* MAIN PAGE LAYOUT */
+
 .review-layout{
 display:flex;
 height:calc(100vh - 120px);
 overflow:hidden;
+width:100%;
 }
-
 
 /* RIGHT DIFF AREA */
 
@@ -42,34 +46,46 @@ display:flex;
 flex-direction:column;
 background:#f8fafc;
 overflow:hidden;
+width:100%;
+min-width:0;
 }
+
+/* DIFF CONTAINER */
 
 .diff-container{
 display:flex;
 gap:16px;
 padding:20px;
-overflow:auto;
 flex:1;
+overflow:hidden;
+width:100%;
+max-width:100%;
+box-sizing:border-box;
 }
 
 /* CODE COLUMNS */
 
 .diff-column{
-flex:1;
+flex:1 1 50%;
+width:50%;
+max-width:50%;
 background:white;
 border:1px solid #e2e8f0;
 border-radius:8px;
-overflow:hidden;
 display:flex;
 flex-direction:column;
 min-width:0;
+overflow:hidden;
 }
+
+/* COLUMN HEADER */
 
 .diff-header{
 padding:10px 14px;
 font-weight:700;
 font-size:12px;
 letter-spacing:0.5px;
+flex-shrink:0;
 }
 
 .diff-header.red{
@@ -96,6 +112,7 @@ font-size:13px;
 .code-line{
 display:flex;
 width:100%;
+min-width:0;
 }
 
 .line-number{
@@ -116,6 +133,8 @@ padding:4px 10px;
 white-space:pre;
 color:#1e293b;
 flex:1;
+overflow-x:auto;
+min-width:0;
 }
 
 /* DIFF COLORS */
@@ -140,6 +159,8 @@ border-left:3px solid #eab308;
 .btn-row{
 display:flex;
 gap:10px;
+margin-top:6px;
+flex-wrap:wrap;
 }
 
 /* BREADCRUMBS */
@@ -151,6 +172,7 @@ font-size:13px;
 font-weight:500;
 margin-bottom:10px;
 color:#64748b;
+flex-wrap:wrap;
 }
 
 .custom-breadcrumbs a{
@@ -189,6 +211,7 @@ padding:10px 36px;
 background:#f8fafc;
 border-bottom:1px solid #e2e8f0;
 font-size:13px;
+flex-wrap:wrap;
 }
 
 .legend-item{
@@ -224,14 +247,12 @@ background:#eab308;
 display:flex;
 align-items:center;
 gap:10px;
-
 padding:12px 20px;
-
 background:white;
 border-bottom:1px solid #e2e8f0;
-
 font-weight:600;
 color:#1e293b;
+flex-shrink:0;
 }
 
 .diff-file-name{
@@ -241,32 +262,27 @@ color:#334155;
 word-break:break-all;
 }
 
+/* FILE NAVIGATION */
 
 .file-nav{
 display:flex;
 align-items:center;
-gap:12px;   /* space between icon and filename */
+gap:12px;
 flex:1;
 cursor:pointer;
+min-width:0;
 }
 
-.btn-row{
-display:flex;
-gap:10px;     /* space between buttons */
-margin-top:6px;
-}
+/* BUTTONS */
 
 .btn-primary{
 background:#2563eb;
 color:white;
 border:none;
-
 padding:8px 12px;
 border-radius:6px;
-
 font-size:12px;
 font-weight:600;
-
 cursor:pointer;
 transition:all 0.15s ease;
 }
@@ -278,13 +294,10 @@ background:#1d4ed8;
 .btn-outline{
 background:white;
 border:1px solid #cbd5e1;
-
 padding:8px 12px;
 border-radius:6px;
-
 font-size:12px;
 font-weight:600;
-
 cursor:pointer;
 transition:all 0.15s ease;
 }

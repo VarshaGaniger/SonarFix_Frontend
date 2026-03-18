@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -21,6 +22,7 @@ import axios from "axios";
 import "./DiffViewer.css";
 import "./CodeViewer.css";
 
+
 const DiffViewer = () => {
 
   const navigate = useNavigate();
@@ -37,6 +39,8 @@ const [fixLoading, setFixLoading] = useState(false);
   const [selectedFixes, setSelectedFixes] = useState({});
 
   const [loading, setLoading] = useState(true);
+  const [oldMethod, setOldMethod] = useState("");
+const [newMethod, setNewMethod] = useState("");
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -45,80 +49,84 @@ const [fixLoading, setFixLoading] = useState(false);
   });
 
   /* ---------------- FETCH DATA ---------------- */
+useEffect(() => {
 
-  useEffect(() => {
+  const fetchData = async () => {
 
-    const fetchData = async () => {
+    try {
 
-      try {
+      const issuesRes = await axios.get(
+        `http://localhost:9090/api/scan/${projectKey}/issues/all`
+      );
 
-        const issuesRes = await axios.get(
-          `http://localhost:9090/api/scan/${projectKey}/issues/all`
-        );
+      const backendIssues =
+        issuesRes.data.content?.flatMap(g => g.issues) || [];
 
-        const backendIssues =
-          issuesRes.data.content?.flatMap(g => g.issues) || [];
+      const issueList = backendIssues.map(issue => ({
+        id: issue.key,
+        ruleId: issue.rule,
+        file: issue.filePath,
+        title: issue.message,
+        severity: issue.severity.toLowerCase(),
+        line: issue.line,
+        autoFixable: issue.autoFixable
+      }));
 
-const issueList = backendIssues.map(issue => ({
-  id: issue.key,
-  ruleId: issue.rule,
-  file: issue.filePath,
-  title: issue.message,
-  severity: issue.severity.toLowerCase(),
-  line: issue.line,
-  autoFixable: issue.autoFixable
-}));
+      setIssues(issueList);
 
-        setIssues(issueList);
-
-        await axios.post(
-          `http://localhost:9090/api/diff/preview/${scanId}`
-        );
-
-        const diffRes = await axios.get(
-          `http://localhost:9090/api/diff/project/${scanId}`
-        );
-
-const mapped = diffRes.data
-  .map(file => ({
-    relativePath: file.relativePath,
-    differences: file.lineDiffs || []
-  }))
-  .filter(file => file.differences.length > 0);
-
-        setFileDiffs(mapped);
-
-        if (mapped.length > 0) {
-          setSelectedFile(mapped[0].relativePath);
+      // 🔥🔥🔥 ADD THIS (CRITICAL FIX)
+      await axios.post(
+        `http://localhost:9090/api/diff/preview/${scanId}`,
+        {
+          fixes: [
+            {
+              fixType: "METHOD_RENAME",
+              oldMethodName: "__dummy__",
+              newMethodName: "__dummy__"
+            }
+          ],
+          projectPath: localStorage.getItem("projectPath")
         }
+      );
 
-        const fileMap = {};
-        mapped.forEach((f, i) => {
-          fileMap[f.relativePath] = i === 0;
-        });
+      // ✅ NOW diff will work
+      const diffRes = await axios.get(
+        `http://localhost:9090/api/diff/project/${scanId}`
+      );
 
-        setOpenFiles(fileMap);
+      const mapped = (diffRes.data || [])
+        .map(file => ({
+          relativePath: file.relativePath,
+          differences: file.lineDiffs || []
+        }))
+        .filter(file => file.differences.length > 0);
 
-        const selectedMap = {};
-issueList.forEach(i => {
-  if (i.autoFixable) {
-    selectedMap[i.id] = true;
-  }
-});
+      setFileDiffs(mapped);
 
-        setSelectedFixes(selectedMap);
-
-      } catch (err) {
-        console.error("Fetch failed", err);
+      if (mapped.length > 0) {
+        setSelectedFile(mapped[0].relativePath);
       }
 
-      setLoading(false);
+    } catch (err) {
 
-    };
+      console.error("Fetch failed", err);
 
-    if (projectKey && scanId) fetchData();
+      setSnackbar({
+        open: true,
+        message: "Failed to load diff preview",
+        severity: "error"
+      });
 
-  }, [projectKey, scanId]);
+    }
+
+    setLoading(false);
+
+  };
+
+  if (projectKey && scanId) fetchData();
+
+}, [projectKey, scanId]);
+  // 🔥 ONLY SHOWING CHANGED PART (useEffect)
 
   /* ---------------- CURRENT FILE ---------------- */
 
@@ -183,6 +191,76 @@ const files = fileDiffs
     setSelectedFixes(updated);
 
   };
+
+  /* ---------------- 🔥 RENAME FUNCTION ---------------- */
+
+const handleRenamePreview = async () => {
+
+  if (!oldMethod || !newMethod) {
+    setSnackbar({
+      open: true,
+      message: "Enter both method names",
+      severity: "warning"
+    });
+    return;
+  }
+
+  try {
+
+    setFixLoading(true);
+
+    await axios.post(
+      `http://localhost:9090/api/diff/preview/${scanId}`,
+      {
+        fixes: [
+          {
+            fixType: "METHOD_RENAME",
+            oldMethodName: oldMethod,
+            newMethodName: newMethod
+          }
+        ],
+        projectPath: localStorage.getItem("projectPath")
+      }
+    );
+
+    // 🔥 reload diff AFTER rename
+    const diffRes = await axios.get(
+      `http://localhost:9090/api/diff/project/${scanId}`
+    );
+
+    const mapped = (diffRes.data || [])
+      .map(file => ({
+        relativePath: file.relativePath,
+        differences: file.lineDiffs || []
+      }))
+      .filter(file => file.differences.length > 0);
+
+    setFileDiffs(mapped);
+
+    if (mapped.length > 0) {
+      setSelectedFile(mapped[0].relativePath);
+    }
+
+    setSnackbar({
+      open: true,
+      message: "Rename preview successful",
+      severity: "success"
+    });
+
+  } catch (err) {
+
+    console.error("Rename error:", err);
+
+    setSnackbar({
+      open: true,
+      message: "Rename preview failed",
+      severity: "error"
+    });
+
+  } finally {
+    setFixLoading(false);
+  }
+};
 
   /* ---------------- FILE EXPAND ---------------- */
 
@@ -329,28 +407,122 @@ const applyAll = async () => {
 
           <div className="left-header">
 
-            <div className="left-title">
-              <h3>TOTAL ISSUES</h3>
-              <span className="badge">{issues.length}</span>
-            </div>
-<div className="btn-row">
-            <button
-              className="btn-outline"
-                disabled={fixLoading}
-              onClick={applySelected}
-            >
-              Accept Fix Selected
-            </button>
+  {/* HEADER */}
+  <div className="left-title">
+    <h3>TOTAL ISSUES</h3>
+    <span className="badge">{issues.length}</span>
+  </div>
 
-            <button
-              className="btn-primary"
-                disabled={fixLoading}
-              onClick={applyAll}
-            >
-              Accept All Fixes
-            </button>
+  {/* 🔥 RENAME CARD */}
+  <Box
+    sx={{
+      mt: 2,
+      p: 2,
+      border: "1px solid #e5e7eb",
+      borderRadius: "10px",
+      background: "#fafafa"
+    }}
+  >
+
+    {/* TITLE */}
+    <Typography
+      sx={{
+        fontWeight: 600,
+        fontSize: "15px",
+        mb: 1.5
+      }}
+    >
+      Method Rename Factory
+    </Typography>
+
+    {/* INPUTS */}
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+
+      {/* OLD */}
+      <Box>
+        <Typography sx={{ fontSize: "12px", color: "#555", mb: 0.5 }}>
+          Old Method Name
+        </Typography>
+        <input
+          value={oldMethod}
+          onChange={(e) => setOldMethod(e.target.value)}
+          placeholder="e.g. calculateSum"
+          style={{
+            width: "100%",
+            padding: "9px",
+            borderRadius: "6px",
+            border: "1px solid #d1d5db",
+            fontSize: "13px"
+          }}
+        />
+      </Box>
+
+      {/* NEW */}
+      <Box>
+        <Typography sx={{ fontSize: "12px", color: "#555", mb: 0.5 }}>
+          New Method Name
+        </Typography>
+        <input
+          value={newMethod}
+          onChange={(e) => setNewMethod(e.target.value)}
+          placeholder="e.g. computeTotal"
+          style={{
+            width: "100%",
+            padding: "9px",
+            borderRadius: "6px",
+            border: "1px solid #d1d5db",
+            fontSize: "13px"
+          }}
+        />
+      </Box>
+
+      {/* BUTTON */}
+      <button
+        onClick={handleRenamePreview}
+        style={{
+          marginTop: "6px",
+          background: "#2563eb",
+          color: "white",
+          border: "none",
+          padding: "10px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontWeight: 500,
+          fontSize: "13px",
+          transition: "0.2s"
+        }}
+        onMouseOver={(e) => e.target.style.background = "#1d4ed8"}
+        onMouseOut={(e) => e.target.style.background = "#2563eb"}
+      >
+        Rename & Preview
+      </button>
+
+    </Box>
+
+  </Box>
+
+  {/* ACTION BUTTONS */}
+  <div className="btn-row" style={{ marginTop: "15px" }}>
+
+    <button
+      className="btn-outline"
+      disabled={fixLoading}
+      onClick={applySelected}
+    >
+      Accept Fix Selected
+    </button>
+
+    <button
+      className="btn-primary"
+      disabled={fixLoading}
+      onClick={applyAll}
+    >
+      Accept All Fixes
+    </button>
+
+  </div>
+
 </div>
-          </div>
 
           <div className="issue-list">
 
@@ -474,6 +646,7 @@ const applyAll = async () => {
     </Typography>
 
   </Box>
+
 
   <Box className="diff-container">
 
@@ -610,3 +783,7 @@ const applyAll = async () => {
 };
 
 export default DiffViewer;
+
+
+
+

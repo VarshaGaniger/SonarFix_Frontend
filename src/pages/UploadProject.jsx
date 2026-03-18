@@ -22,13 +22,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./UploadProject.css";
 
-/*
-  🔥 IMPORTANT — YOUR REAL BACKEND APIs
-  ZIP        → POST /api/project/upload-zip
-  GITHUB     → POST /api/project/upload-github?repoUrl=
-  LOCAL PATH → POST /api/scan/start?projectPath=
-*/
-
 const UploadProject = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -68,7 +61,6 @@ const UploadProject = () => {
   };
 
   // ================= START ANALYSIS =================
- 
   const startAnalysis = async () => {
     try {
       setLoading(true);
@@ -107,42 +99,47 @@ const UploadProject = () => {
       }
 
       else {
-        alert("Please upload ZIP, enter Git URL, or Local Path.");
+        alert("Please upload ZIP, Git URL, or Local Path.");
         return;
       }
 
-      // ================= EXTRACT PROJECT PATH =================
+      // ================= 🔥 FIXED PROJECT PATH EXTRACTION =================
       const uploadData = uploadResponse.data;
 
-      if (uploadData && uploadData.projectPath) {
+      console.log("UPLOAD RESPONSE:", uploadData);
+
+      if (uploadData?.projectPath) {
         projectPath = uploadData.projectPath;
       } else if (typeof uploadData === "string") {
-        // If backend returns: "Project uploaded at: D:/sonar-workspace/123"
-        if (uploadData.includes(":")) {
-          // Find the index of the first colon, if it's a Windows drive letter "D:/", we need to be careful
-          // The old code split by ":" and popped, which breaks "D:/path".
-          // Instead, just use the string directly if it doesn't look like the old format
-          if (uploadData.startsWith("Project uploaded at:")) {
-            projectPath = uploadData.replace("Project uploaded at:", "").trim();
-          } else {
-            projectPath = uploadData.trim();
-          }
+
+        if (uploadData.includes("Project uploaded at:")) {
+          projectPath = uploadData
+            .replace("Project uploaded at:", "")
+            .trim();
         } else {
           projectPath = uploadData.trim();
         }
       }
 
       if (!projectPath) {
-        alert("Could not determine project path from upload response: " + JSON.stringify(uploadData));
+        alert("❌ Failed to get project path from backend");
+        console.error("Invalid upload response:", uploadData);
         return;
       }
 
-      console.log("Project Path:", projectPath);
-// extract projectKey from path
-const projectKey = projectPath.split(/[\\/]/).pop();
+      // ================= 🔥 STORE CRITICAL DATA =================
+      console.log("✅ Project Path:", projectPath);
 
-// store in localStorage
-localStorage.setItem("projectKey", projectKey);
+      const projectKey = projectPath.split(/[\\/]/).pop();
+
+      localStorage.setItem("projectKey", projectKey);
+
+      // 🔥 MOST IMPORTANT FIX (THIS FIXES YOUR DIFF ISSUE)
+      localStorage.setItem("projectPath", projectPath);
+
+      // DEBUG
+      console.log("Stored projectPath:", localStorage.getItem("projectPath"));
+
       // ================= START SCAN =================
       const scanResponse = await axios.post(
         "http://localhost:9090/api/scan/start",
@@ -151,16 +148,17 @@ localStorage.setItem("projectKey", projectKey);
       );
 
       const scanId = scanResponse.data.scanId;
-      localStorage.setItem("scanId", scanId);
 
       if (!scanId) {
-        alert("Scan ID not returned from backend.");
+        alert("❌ Scan ID not returned");
         return;
       }
 
-      console.log("Scan ID:", scanId);
+      localStorage.setItem("scanId", scanId);
 
-      // Navigate correctly
+      console.log("✅ Scan ID:", scanId);
+
+      // ================= NAVIGATE =================
       navigate(`/scan-status/${scanId}`);
 
     } catch (error) {
@@ -170,7 +168,6 @@ localStorage.setItem("projectKey", projectKey);
       setLoading(false);
     }
   };
-
 
   return (
     <Box className="upload-container">
@@ -187,14 +184,13 @@ localStorage.setItem("projectKey", projectKey);
         <Card className="upload-card">
           <CardContent sx={{ p: 4 }}>
 
-            {/* ================= ZIP Upload ================= */}
+            {/* ZIP Upload */}
             <Typography variant="subtitle2" className="section-label">
               Upload ZIP Project
             </Typography>
 
             <Box
-              className={`dropzone ${isDragging ? "drag-over" : ""} ${selectedFile ? "has-file" : ""
-                }`}
+              className={`dropzone ${isDragging ? "drag-over" : ""} ${selectedFile ? "has-file" : ""}`}
               onClick={handleFileSelect}
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
@@ -236,7 +232,6 @@ localStorage.setItem("projectKey", projectKey);
               )}
             </Box>
 
-            {/* ================= Divider ================= */}
             <Box sx={{ my: 4 }}>
               <Divider>
                 <Typography variant="caption">
@@ -245,7 +240,7 @@ localStorage.setItem("projectKey", projectKey);
               </Divider>
             </Box>
 
-            {/* ================= Git Repo ================= */}
+            {/* Git */}
             <Typography variant="subtitle2" className="section-label">
               Git Repository URL
             </Typography>
@@ -265,7 +260,7 @@ localStorage.setItem("projectKey", projectKey);
               }}
             />
 
-            {/* ================= Local Path ================= */}
+            {/* Local */}
             <Typography variant="subtitle2" className="section-label">
               Local Project Path
             </Typography>
@@ -284,7 +279,7 @@ localStorage.setItem("projectKey", projectKey);
               }}
             />
 
-            {/* ================= Start Button ================= */}
+            {/* Button */}
             <Button
               fullWidth
               variant="contained"
