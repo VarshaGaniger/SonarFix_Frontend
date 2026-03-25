@@ -75,7 +75,7 @@ function App() {
                 <Route path="issues" element={<Issues />} />
                 <Route path="code" element={<CodeViewer />} />
                 <Route path="diff" element={<DiffViewer />} />
-                <Route path="summary" element={<SummaryDownload />} />
+                <Route path="summary/:scanId" element={<SummaryDownload />} />
   
 
               </Route>

@@ -22,12 +22,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./UploadProject.css";
 
-/*
-  🔥 IMPORTANT — YOUR REAL BACKEND APIs
-  ZIP        → POST /api/project/upload-zip
-  GITHUB     → POST /api/project/upload-github?repoUrl=
-  LOCAL PATH → POST /api/scan/start?projectPath=
-*/
 
 const UploadProject = () => {
   const navigate = useNavigate();
@@ -67,109 +61,76 @@ const UploadProject = () => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // ================= START ANALYSIS =================
- 
-  const startAnalysis = async () => {
-    try {
-      setLoading(true);
+ const [loadingMsg, setLoadingMsg] = useState("");
+const startAnalysis = async () => {
+  if (!selectedFile && !repoUrl.trim() && !localPath.trim()) {
+    alert("Provide input");
+    return;
+  }
 
-      let uploadResponse;
-      let projectPath = "";
+  setLoading(true);
 
-      // ================= ZIP Upload =================
-      if (selectedFile) {
-        const formData = new FormData();
-        formData.append("file", selectedFile);
+  try {
+    let uploadResponse;
 
-        uploadResponse = await axios.post(
-          "http://localhost:9090/api/project/upload-zip",
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
-      }
+    // ================= UPLOAD =================
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
 
-      // ================= Git Upload =================
-      else if (repoUrl.trim() !== "") {
-        uploadResponse = await axios.post(
-          "http://localhost:9090/api/project/upload-github",
-          null,
-          { params: { repoUrl } }
-        );
-      }
-
-      // ================= Local Upload =================
-      else if (localPath.trim() !== "") {
-        uploadResponse = await axios.post(
-          "http://localhost:9090/api/project/upload-local",
-          null,
-          { params: { localPath } }
-        );
-      }
-
-      else {
-        alert("Please upload ZIP, enter Git URL, or Local Path.");
-        return;
-      }
-
-      // ================= EXTRACT PROJECT PATH =================
-      const uploadData = uploadResponse.data;
-
-      if (uploadData && uploadData.projectPath) {
-        projectPath = uploadData.projectPath;
-      } else if (typeof uploadData === "string") {
-        // If backend returns: "Project uploaded at: D:/sonar-workspace/123"
-        if (uploadData.includes(":")) {
-          // Find the index of the first colon, if it's a Windows drive letter "D:/", we need to be careful
-          // The old code split by ":" and popped, which breaks "D:/path".
-          // Instead, just use the string directly if it doesn't look like the old format
-          if (uploadData.startsWith("Project uploaded at:")) {
-            projectPath = uploadData.replace("Project uploaded at:", "").trim();
-          } else {
-            projectPath = uploadData.trim();
-          }
-        } else {
-          projectPath = uploadData.trim();
-        }
-      }
-
-      if (!projectPath) {
-        alert("Could not determine project path from upload response: " + JSON.stringify(uploadData));
-        return;
-      }
-
-      console.log("Project Path:", projectPath);
-// extract projectKey from path
-const projectKey = projectPath.split(/[\\/]/).pop();
-
-// store in localStorage
-localStorage.setItem("projectKey", projectKey);
-      // ================= START SCAN =================
-      const scanResponse = await axios.post(
-        "http://localhost:9090/api/scan/start",
-        null,
-        { params: { projectPath } }
+      uploadResponse = await axios.post(
+        "http://localhost:9090/api/project/upload-zip",
+        formData
       );
-
-      const scanId = scanResponse.data.scanId;
-      localStorage.setItem("scanId", scanId);
-
-      if (!scanId) {
-        alert("Scan ID not returned from backend.");
-        return;
-      }
-
-      console.log("Scan ID:", scanId);
-
-      // Navigate correctly
-      navigate(`/scan-status/${scanId}`);
-
-    } catch (error) {
-      console.error("Scan error:", error);
-      alert("Something went wrong while starting scan.");
-    } finally {
-      setLoading(false);
+    } else if (repoUrl.trim()) {
+      uploadResponse = await axios.post(
+        "http://localhost:9090/api/project/upload-github",
+        null,
+        { params: { repoUrl } }
+      );
+    } else {
+      uploadResponse = await axios.post(
+        "http://localhost:9090/api/project/upload-local",
+        null,
+        { params: { localPath: localPath.replace(/\\/g, "/") } }
+      );
     }
-  };
+
+    const projectPath =
+      uploadResponse.data?.projectPath || uploadResponse.data;
+
+    if (!projectPath) {
+      throw new Error("Project path missing");
+    }
+
+    // ================= START SCAN =================
+    const scanResponse = await axios.post(
+      "http://localhost:9090/api/scan/start",
+      null,
+      { params: { projectPath } }
+    );
+
+    const scanId = scanResponse.data.scanId;
+    const projectKey = projectPath.split(/[\\/]/).pop();
+
+    if (!scanId) {
+      throw new Error("Scan ID missing");
+    }
+
+    // ✅ Store
+    localStorage.setItem("scanId", scanId);
+    localStorage.setItem("projectKey", projectKey);
+
+    // ✅ Navigate IMMEDIATELY after scan starts
+    navigate(`/scan-status/${scanId}?projectKey=${projectKey}&type=initial`);
+
+  } catch (error) {
+    console.error("Scan error:", error);
+    alert("Failed to start scan");
+  } finally {
+    setLoading(false);
+  }
+};
 
 
   return (

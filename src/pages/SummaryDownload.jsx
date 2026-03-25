@@ -27,44 +27,47 @@ const scanId =
 
   useEffect(() => {
 
-    const fetchSummary = async () => {
+const fetchSummary = async () => {
+  try {
+    const reportRes = await axios.get(
+      `http://localhost:9090/api/fix/report/${scanId}`
+    );
+    const report = reportRes.data;
 
+    //  Total fixes applied — use backend's totalFixes as source of truth
+    const fixMap = report.report || {};
+    const totalFromBackend = report.totalFixes || 0;
+    const fixedFromMap = Object.values(fixMap).reduce((sum, c) => sum + c, 0);
+    const effectiveFixed = Math.max(fixedFromMap, totalFromBackend);
+    setTotalFixed(effectiveFixed);
+
+    //  Use originalIssueCount (snapshotted before fixing) for accurate remaining
+    if (report.originalIssueCount && report.originalIssueCount > 0) {
+      setTotalIssues(report.originalIssueCount);
+    } else {
+      // fallback: fetch from scan result (post-fix count — less accurate)
       try {
-
         const resultRes = await axios.get(
           `http://localhost:9090/api/scan/result/${scanId}`
         );
-
-        const reportRes = await axios.get(
-          `http://localhost:9090/api/fix/report/${scanId}`
-        );
-
-        const result = resultRes.data;
-        const report = reportRes.data;
-
-        setTotalIssues(result.totalIssues || 0);
-        setTotalFixed(report.totalFixes || 0);
-
-        const changes = Object.entries(report.report || {}).map(
-          ([fixType, count]) => ({
-            fixType,
-            count
-          })
-        );
-
-        setChangeLog(changes);
-
-      } catch (err) {
-
-        console.error("Failed to load summary", err);
-
-      } finally {
-
-        setLoading(false);
-
+        setTotalIssues(resultRes.data.totalIssues || 0);
+      } catch {
+        // not critical
       }
+    }
 
-    };
+    const changes = Object.entries(fixMap).map(([fixType, count]) => ({
+      fixType,
+      count
+    }));
+    setChangeLog(changes);
+
+  } catch (err) {
+    console.error("Failed to load summary", err);
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchSummary();
 

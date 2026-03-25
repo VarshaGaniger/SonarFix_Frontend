@@ -1,4 +1,4 @@
-import React from 'react';
+
 import {
   Drawer,
   List,
@@ -14,10 +14,10 @@ import {
 import {
   LayoutDashboard,
   FolderOpen,
-  Activity,
   LogOut,
   Code
 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
@@ -26,11 +26,23 @@ const drawerWidth = 260;
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-const params = useParams();
-const projectKey = params.projectKey || localStorage.getItem("projectKey");
+  const params = useParams();
+  const projectKey = params.projectKey || localStorage.getItem("projectKey");
 
   const isInsideProject = location.pathname.startsWith('/projects/');
 
+
+// ✅ Re-check on every navigation so sidebar reflects latest state
+
+  const scanId = localStorage.getItem("scanId");
+
+const [fixAccepted, setFixAccepted] = useState(
+  localStorage.getItem(`fixAccepted_${scanId}`) === "true"
+);
+useEffect(() => {
+  const id = localStorage.getItem("scanId");
+  setFixAccepted(localStorage.getItem(`fixAccepted_${id}`) === "true");
+}, [location.pathname]);
   const menuItems = [
     {
       text: 'Dashboard',
@@ -43,7 +55,6 @@ const projectKey = params.projectKey || localStorage.getItem("projectKey");
       path: '/upload'
     }
   ];
-
 
   return (
     <Drawer
@@ -117,12 +128,7 @@ const projectKey = params.projectKey || localStorage.getItem("projectKey");
                     }
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      color: 'inherit',
-                      minWidth: 40
-                    }}
-                  >
+                  <ListItemIcon sx={{ color: 'inherit', minWidth: 40 }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText
@@ -139,105 +145,99 @@ const projectKey = params.projectKey || localStorage.getItem("projectKey");
 
           {/* PROJECT SUB NAV (ONLY WHEN INSIDE PROJECT) */}
           {isInsideProject && projectKey && (
-            <>
-              <Box
+            <Box
+              sx={{
+                borderTop: '1px solid #2d2e3a',
+                mt: 2,
+                pt: 2,
+                px: 2
+              }}
+            >
+              <Typography
                 sx={{
-                  borderTop: '1px solid #2d2e3a',
-                  mt: 2,
-                  pt: 2,
-                  px: 2
+                  fontSize: '0.75rem',
+                  color: '#64748b',
+                  mb: 1
                 }}
               >
-                <Typography
-                  sx={{
-                    fontSize: '0.75rem',
-                    color: '#64748b',
-                    mb: 1
-                  }}
-                >
-                  PROJECT
-                </Typography>
+                PROJECT
+              </Typography>
 
-                <ListItemButton
-                  selected={location.pathname.includes('/issues')}
-                  onClick={() =>
-                    navigate(`/projects/${projectKey}/issues`)
-                  }
-                  sx={{
-                    borderRadius: 2,
-                    py: 1.2,
-                    color: location.pathname.includes('/issues')
-                      ? '#fff'
-                      : '#94a3b8',
-                    '&:hover': {
-                      backgroundColor: '#252630',
-                      color: '#fff'
-                    }
-                  }}
-                >
-                  <ListItemText primary="Issues Explorer" />
-                </ListItemButton>
+              {/* Issues Explorer */}
+              <ListItemButton
+                selected={location.pathname.includes('/issues')}
+                onClick={() => navigate(`/projects/${projectKey}/issues`)}
+                sx={{
+                  borderRadius: 2,
+                  py: 1.2,
+                  color: location.pathname.includes('/issues') ? '#fff' : '#94a3b8',
+                  '&:hover': { backgroundColor: '#252630', color: '#fff' }
+                }}
+              >
+                <ListItemText primary="Issues Explorer" />
+              </ListItemButton>
 
-                <ListItemButton
-                  selected={location.pathname.includes('/code')}
-                  onClick={() =>
-                    navigate(`/projects/${projectKey}/code`)
-                  }
-                  sx={{
-                    borderRadius: 2,
-                    py: 1.2,
-                    color: location.pathname.includes('/code')
-                      ? '#fff'
-                      : '#94a3b8',
-                    '&:hover': {
-                      backgroundColor: '#252630',
-                      color: '#fff'
-                    }
-                  }}
-                >
-                  <ListItemText primary="Code Viewer" />
-                </ListItemButton>
-                <ListItemButton
-                  selected={location.pathname.includes('/diff')}
-                  onClick={() =>
-                    navigate(`/projects/${projectKey}/diff`)
-                  }
-                  sx={{
-                    borderRadius: 2,
-                    py: 1.2,
-                    color: location.pathname.includes('/diff')
-                      ? '#fff'
-                      : '#94a3b8',
-                    '&:hover': {
-                      backgroundColor: '#252630',
-                      color: '#fff'
-                    }
-                  }}
-                >
-                  <ListItemText primary="Diff Viewer" />
-                </ListItemButton>
+              {/* Code Viewer */}
+              <ListItemButton
+                selected={location.pathname.includes('/code')}
+                onClick={() => navigate(`/projects/${projectKey}/code`)}
+                sx={{
+                  borderRadius: 2,
+                  py: 1.2,
+                  color: location.pathname.includes('/code') ? '#fff' : '#94a3b8',
+                  '&:hover': { backgroundColor: '#252630', color: '#fff' }
+                }}
+              >
+                <ListItemText primary="Code Viewer" />
+              </ListItemButton>
 
-                <ListItemButton
-                  selected={location.pathname.includes('/summary')}
-                  onClick={() =>
-                    navigate(`/projects/${projectKey}/summary`)
+              {/* Diff Viewer */}
+              <ListItemButton
+                selected={location.pathname.includes('/diff')}
+                onClick={() => navigate(`/projects/${projectKey}/diff`)}
+                sx={{
+                  borderRadius: 2,
+                  py: 1.2,
+                  color: location.pathname.includes('/diff') ? '#fff' : '#94a3b8',
+                  '&:hover': { backgroundColor: '#252630', color: '#fff' }
+                }}
+              >
+                <ListItemText primary="Diff Viewer" />
+              </ListItemButton>
+
+              {/* Summary — locked until fix accepted */}
+              <ListItemButton
+                selected={location.pathname.includes('/summary')}
+                disabled={!fixAccepted}
+                onClick={() => {
+                  if (fixAccepted && scanId) {
+                    navigate(`/projects/${projectKey}/summary/${scanId}`);
                   }
-                  sx={{
-                    borderRadius: 2,
-                    py: 1.2,
-                    color: location.pathname.includes('/summary')
-                      ? '#fff'
-                      : '#94a3b8',
-                    '&:hover': {
-                      backgroundColor: '#252630',
-                      color: '#fff'
-                    }
-                  }}
-                >
-                  <ListItemText primary="Summary" />
-                </ListItemButton>
-              </Box>
-            </>
+                }}
+                sx={{
+                  borderRadius: 2,
+                  py: 1.2,
+                  color: location.pathname.includes('/summary') ? '#fff' : '#94a3b8',
+                  '&:hover': {
+                    backgroundColor: fixAccepted ? '#252630' : 'transparent',
+                    color: fixAccepted ? '#fff' : '#94a3b8'
+                  },
+                  '&.Mui-disabled': {
+                    opacity: 0.35,
+                    cursor: 'not-allowed',
+                    pointerEvents: 'auto'
+                  }
+                }}
+              >
+                <ListItemText primary="Summary" />
+                {!fixAccepted && (
+                  <Typography sx={{ fontSize: '0.65rem', color: '#475569', ml: 1 }}>
+                    🔒
+                  </Typography>
+                )}
+              </ListItemButton>
+
+            </Box>
           )}
         </List>
       </Box>

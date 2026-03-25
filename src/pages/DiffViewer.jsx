@@ -32,9 +32,12 @@ const DiffViewer = () => {
   const projectKey = paramProjectKey || localStorage.getItem("projectKey");
   const [scanId, setScanId] = useState(localStorage.getItem("scanId"));
   const [fixLoading, setFixLoading] = useState(false);
+  const [reportData, setReportData] = useState([]);
+  const [showReport, setShowReport] = useState(false);
   const [renameOldName, setRenameOldName] = useState("");
   const [renameNewName, setRenameNewName] = useState("");
   const [isRenameMode, setIsRenameMode] = useState(false);
+  const [renameType, setRenameType] = useState("variable");
   const [issues, setIssues] = useState([]);
   const [fileDiffs, setFileDiffs] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -117,16 +120,20 @@ const DiffViewer = () => {
           });
 
           setOpenFiles(fileMap);
+        // fetch report after rename
+const reportRes = await axios.get(
+  "http://localhost:9090/api/refactor/final-report",
+  { params: { scanId } }
+);
+
+setReportData(reportRes.data);
+setShowReport(true);
+
         }
 
-        const selectedMap = {};
-        issueList.forEach(i => {
-          if (i.autoFixable) {
-            selectedMap[i.id] = true;
-          }
-        });
+   
 
-        setSelectedFixes(selectedMap);
+        setSelectedFixes({});
 
       } catch (err) {
         console.error("Fetch failed", err);
@@ -142,21 +149,18 @@ const DiffViewer = () => {
 
   /* ---------------- CURRENT FILE ---------------- */
 
+  const normalize = p => p?.replaceAll("\\", "/");
+
   const currentFile =
-    fileDiffs.find(f => f.relativePath === selectedFile) || null;
+    fileDiffs.find(f => normalize(f.relativePath) === normalize(selectedFile)) || null;
 
   /* ---------------- FILE GROUPING ---------------- */
- const normalize = p => p?.replaceAll("\\", "/");
-const files = fileDiffs
-  .map(f => f.relativePath)
-  .filter(file =>
-    isRenameMode || issues.some(i =>
-      normalize(i.file)?.endsWith(normalize(file))
-    )
-  );
+
+  const files = fileDiffs
+   .map(f => f.relativePath)
+   .filter(p => p.endsWith(".java"));
 
  
-
   const getFileIssues = filePath => {
 
     const normalizedFile = normalize(filePath);
@@ -178,15 +182,12 @@ const files = fileDiffs
 
   };
 
-  const isFileChecked = filePath => {
-
-    const fileIssues = getFileIssues(filePath);
-
-    if (fileIssues.length === 0) return false;
-
-    return fileIssues.every(i => selectedFixes[i.id]);
-
-  };
+ const isFileChecked = filePath => {
+  const fileIssues = getFileIssues(filePath);
+  if (isRenameMode) return false; // or true if you want
+  if (fileIssues.length === 0) return false;
+  return fileIssues.every(i => selectedFixes[i.id]);
+};
 
   const toggleFileIssues = filePath => {
 
@@ -204,6 +205,24 @@ const files = fileDiffs
 
   };
 
+  const isRuleChecked = ruleId => {
+    const ruleIssues = issues.filter(i => i.ruleId === ruleId);
+    if (ruleIssues.length === 0) return false;
+    return ruleIssues.every(i => selectedFixes[i.id]);
+  };
+
+  const toggleRuleIssues = ruleId => {
+    const ruleIssues = issues.filter(i => i.ruleId === ruleId);
+    const shouldSelect = !isRuleChecked(ruleId);
+    const updated = { ...selectedFixes };
+    ruleIssues.forEach(issue => {
+      if (issue.autoFixable) {
+        updated[issue.id] = shouldSelect;
+      }
+    });
+    setSelectedFixes(updated);
+  };
+
   /* ---------------- FILE EXPAND ---------------- */
 
   const toggleFileExpand = filePath => {
@@ -217,84 +236,65 @@ const files = fileDiffs
 
   /* ---------------- APPLY FIXES ---------------- */
 const applySelected = async () => {
-
   const selectedIssues = issues
     .filter(i => selectedFixes[i.id])
     .map(i => i.id);
 
   if (!selectedIssues.length) {
+    setSnackbar({ open: true, message: "No fixes selected", severity: "warning" });
+    return;
+  }
+  localStorage.removeItem(`fixAccepted_${scanId}`);
+  navigate(`/scan-status/${scanId}?projectKey=${projectKey}&type=fix`);
 
+  axios.post(
+    "http://localhost:9090/api/fix/apply/selected",
+    selectedIssues,
+    { params: { scanId } }
+  ).catch(err => console.error("Fix selected failed", err));
+};
+
+const applyAll = async () => {
+    localStorage.removeItem(`fixAccepted_${scanId}`);
+  
+  navigate(`/scan-status/${scanId}?projectKey=${projectKey}&type=fix`);
+
+  axios.post(`http://localhost:9090/api/fix/apply/${scanId}`)
+    .catch(err => console.error("Fix all failed", err));
+};
+
+const handleRename = async () => {
+
+  if (renameOldName === renameNewName) {
     setSnackbar({
       open: true,
-      message: "No fixes selected",
+      message: "Old and new name cannot be same",
       severity: "warning"
     });
-
     return;
   }
 
   try {
-
-    setFixLoading(true);
-
-    await axios.post(
-      "http://localhost:9090/api/fix/apply/selected",
-      selectedIssues,
-      { params: { scanId } }
-    );
-
-    navigate(`/projects/${projectKey}/summary`);
-
-  } catch {
-
-    setSnackbar({
-      open: true,
-      message: "Fix failed",
-      severity: "error"
-    });
-
-  } finally {
-    setFixLoading(false);
-  }
-
-};
-
-const applyAll = async () => {
-
-  try {
-
-    setFixLoading(true);
-
-    await axios.post(
-      `http://localhost:9090/api/fix/apply/${scanId}`
-    );
-
-    navigate(`/projects/${projectKey}/summary`);
-
-  } catch {
-
-    setSnackbar({
-      open: true,
-      message: "AutoFix ALL failed",
-      severity: "error"
-    });
-
-  } finally {
-    setFixLoading(false);
-  }
-
-};
-
-const handleRenameVariable = async () => {
-  try {
     setFixLoading(true);
     setIsRenameMode(true);
-    const res = await axios.post("http://localhost:9090/api/refactor/rename-variable", {
-      scanId,
-      oldName: renameOldName,
-      newName: renameNewName
-    });
-    
+
+    const endpointMap = {
+      variable: "rename-variable",
+      method: "rename-method",
+      class: "rename-class"
+    };
+
+    const endpoint = endpointMap[renameType];
+
+    const res = await axios.post(
+      `http://localhost:9090/api/refactor/${endpoint}`,
+      {
+        scanId,
+        oldName: renameOldName,
+        newName: renameNewName
+      }
+    );
+
     const mapped = res.data
       .map(file => ({
         relativePath: file.relativePath,
@@ -309,7 +309,7 @@ const handleRenameVariable = async () => {
     } else {
       setSnackbar({
         open: true,
-        message: "No variable usages found",
+        message: `No ${renameType} usages found`,
         severity: "info"
       });
     }
@@ -319,11 +319,11 @@ const handleRenameVariable = async () => {
       fileMap[f.relativePath] = true;
     });
     setOpenFiles(fileMap);
-
+window.location.reload();
   } catch (err) {
     setSnackbar({
       open: true,
-      message: "Variable rename failed",
+      message: `${renameType} rename failed`,
       severity: "error"
     });
   } finally {
@@ -334,9 +334,6 @@ const handleRenameVariable = async () => {
 const handleFixByRule = async (e, ruleId) => {
   e.stopPropagation();
 
-  // Primary scanId from backend response (we got it from all issues call)
-  const currentScanId = scanId;
-
   if (!window.confirm(`Are you sure you want to fix all auto-fixable issues for rule ${ruleId}?`)) {
     return;
   }
@@ -344,22 +341,30 @@ const handleFixByRule = async (e, ruleId) => {
   try {
     setIsFixingRule(prev => ({ ...prev, [ruleId]: true }));
     setFixLoading(true);
-
-    const resp = await axios.post(`http://localhost:9090/api/fix/apply/rule?scanId=${currentScanId}&ruleId=${ruleId}`);
+  localStorage.removeItem(`fixAccepted_${scanId}`);
+    const resp = await axios.post(`http://localhost:9090/api/fix/apply/rule?scanId=${scanId}&ruleId=${ruleId}`);
     
     if (resp.status === 200) {
-      if (resp.data.fixesApplied > 0) {
-        alert(`Successfully applied ${resp.data.fixesApplied} fixes for rule ${ruleId}!`);
-        window.location.reload();
-      } else {
-        alert(`No new fixes were applied for rule ${ruleId}. The issues may already be fixed, or they may require manual intervention.`);
-        setIsFixingRule(prev => ({ ...prev, [ruleId]: false }));
-        setFixLoading(false);
-      }
+      const fixedCount = resp.data.fixesApplied;
+      setSnackbar({
+        open: true,
+        message: `Successfully applied ${fixedCount} fixes for rule ${ruleId}!`,
+        severity: "success"
+      });
+
+      // Navigate to summary to show the results
+      navigate(`/scan-status/${scanId}?projectKey=${projectKey}&type=fix`);
     }
+
   } catch (err) {
     console.error("Fix by Rule failed", err);
-    alert("Failed to apply rule-level fixes: " + (err.response?.data || err.message));
+    const errorMsg = err.response?.data?.message || (typeof err.response?.data === 'string' ? err.response?.data : null) || err.message;
+    setSnackbar({
+      open: true,
+      message: `Failed to apply rule-level fixes: ${errorMsg}`,
+      severity: "error"
+    });
+  } finally {
     setIsFixingRule(prev => ({ ...prev, [ruleId]: false }));
     setFixLoading(false);
   }
@@ -376,6 +381,21 @@ const handleFixByRule = async (e, ruleId) => {
     );
 
   }
+
+  const downloadCSV = () => {
+  const csv = [
+    ["OldClass","NewClass","File","Line","Usage"],
+    ...reportData
+  ].map(r => r.join(",")).join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "refactor-report.csv";
+  a.click();
+};
 
   /* ---------------- UI ---------------- */
 
@@ -435,29 +455,59 @@ const handleFixByRule = async (e, ruleId) => {
             </div>
 
             <div style={{ padding: "10px 0", display: "flex", flexDirection: "column", gap: "8px" }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>Refactor Variable</Typography>
-              <input 
-                type="text" 
-                placeholder="Old Variable Name" 
-                value={renameOldName} 
-                onChange={e => setRenameOldName(e.target.value)} 
-                style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
-              />
-              <input 
-                type="text" 
-                placeholder="New Variable Name" 
-                value={renameNewName} 
-                onChange={e => setRenameNewName(e.target.value)} 
-                style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
-              />
-              <button 
-                className="btn-outline" 
-                disabled={fixLoading || !renameOldName || !renameNewName} 
-                onClick={handleRenameVariable}
-              >
-                Refactor & Preview
-              </button>
+            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+  Refactor Rename
+  
+</Typography>
+    
+
+<button 
+  className="btn-outline" 
+  disabled={!reportData.length}
+  onClick={downloadCSV}
+>
+  Download CSV
+</button>
+
+<select
+  value={renameType}
+  onChange={e => setRenameType(e.target.value)}
+  style={{
+    padding: "8px",
+    borderRadius: "4px",
+    border: "1px solid #ddd"
+  }}
+>
+  <option value="variable">Variable</option>
+  <option value="method">Method</option>
+  <option value="class">Class</option>
+</select>
+
+<input 
+  type="text" 
+  placeholder="Old Name" 
+  value={renameOldName} 
+  onChange={e => setRenameOldName(e.target.value)} 
+  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
+/>
+
+<input 
+  type="text" 
+  placeholder="New Name" 
+  value={renameNewName} 
+  onChange={e => setRenameNewName(e.target.value)} 
+  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
+/>
+
+<button 
+  className="btn-outline" 
+  disabled={fixLoading || !renameOldName || !renameNewName} 
+  onClick={handleRename}
+>
+  Refactor & Preview
+</button>
             </div>
+          
 
 <div className="btn-row">
             <button
@@ -497,7 +547,6 @@ const handleFixByRule = async (e, ruleId) => {
 
            {groupBy === 'file' ? (
              files
-               .filter(filePath => isRenameMode || getFileIssues(filePath).length > 0)
                .map(filePath => (
                  <div key={filePath} className="file-group">
                    <div className="file-header">
@@ -552,9 +601,15 @@ const handleFixByRule = async (e, ruleId) => {
                return (
                  <div key={ruleId} className="rule-group">
                    <div className="rule-header" onClick={() => toggleFileExpand(ruleId)}>
-                     <span className="expand-icon">
+                     <span className="expand-icon" style={{ pointerEvents: 'none' }}>
                        {openFiles[ruleId] ? <ChevronDown size={16}/> : <ChevronRight size={16}/>}
                      </span>
+                     <input
+                       type="checkbox"
+                       checked={isRuleChecked(ruleId)}
+                       onClick={e => e.stopPropagation()}
+                       onChange={() => toggleRuleIssues(ruleId)}
+                     />
                      <div className="rule-info">
                         <span className="rule-id">{ruleId}</span>
                         <span className="count-badge">{ruleIssues.length}</span>
@@ -582,6 +637,12 @@ const handleFixByRule = async (e, ruleId) => {
                           }, 120);
                         }}
                      >
+                       <input
+                         type="checkbox"
+                         checked={selectedFixes[issue.id] || false}
+                         onClick={e => e.stopPropagation()}
+                         onChange={() => toggleIssue(issue.id)}
+                       />
                         <div className="issue-content">
                           <h4>{issue.title}</h4>
                           <div className="issue-meta">
@@ -615,81 +676,78 @@ const handleFixByRule = async (e, ruleId) => {
   </Box>
 
   <Box className="diff-container">
-
-            {/* ORIGINAL */}
-
-            <Box className="diff-column">
-
-              <Box className="diff-header red">
-                ORIGINAL
-              </Box>
-
-              <Box className="code-block">
-
-                {currentFile?.differences?.map((d, index) => (
-
-  <Box
-    key={`${d.lineNumber}-${d.type}-fix-${index}`}
-    className={`code-line ${
-      { ADDED:"added", MODIFIED:"modified" }[d.type] || ""
-    }`}
-  >
-
-                    <Box className="line-number">
-                      {d.lineNumber}
-                    </Box>
-
-                    <pre className="line-code">
-                      {d.originalLine ?? ""}
-                    </pre>
-
-                  </Box>
-
-                ))}
-
-              </Box>
-
-            </Box>
-
-            {/* FIXED */}
-
-            <Box className="diff-column">
-
-              <Box className="diff-header green">
-                PROPOSED FIX
-              </Box>
-
-              <Box className="code-block">
-
-                {currentFile?.differences?.map(d => (
-
-                  <Box
-                    key={`${d.lineNumber}-${d.type}-fix`}
-                    className={`code-line ${
-                      { ADDED:"added", MODIFIED:"modified" }[d.type] || ""
-                    }`}
-                  >
-
-                    <Box className="line-number">
-                      {d.lineNumber}
-                    </Box>
-
-                    <pre className="line-code">
-                      {d.modifiedLine ?? ""}
-                    </pre>
-
-                  </Box>
-
-                ))}
-
-              </Box>
-
-            </Box>
-
+    {!currentFile?.differences?.length ? (
+      <Box 
+        sx={{ 
+          display: "flex", 
+          flexDirection: "column", 
+          alignItems: "center", 
+          justifyContent: "center", 
+          width: "100%", 
+          color: "#64748b",
+          background: "white",
+          borderRadius: "8px",
+          border: "1px dashed #cbd5e1",
+          padding: "40px 20px"
+        }}
+      >
+        <Typography variant="h6" sx={{ color: "#334155", mb: 1 }}>No Auto-Fix Proposed</Typography>
+        <Typography variant="body2">The auto-fix engine did not generate any code changes for this file.</Typography>
+        <Typography variant="body2" sx={{ mt: 1 }}>This issue may not be fully supported by the current auto-fix rules, or it requires manual resolution.</Typography>
+      </Box>
+    ) : (
+      <>
+        {/* ORIGINAL */}
+        <Box className="diff-column">
+          <Box className="diff-header red">
+            ORIGINAL
           </Box>
-
+          <Box className="code-block">
+            {currentFile.differences.map((d, index) => (
+              <Box
+                key={`${d.lineNumber}-${d.type}-fix-${index}`}
+                className={`code-line ${
+                  { ADDED:"added", MODIFIED:"modified" }[d.type] || ""
+                }`}
+              >
+                <Box className="line-number">
+                  {d.lineNumber}
+                </Box>
+                <pre className="line-code">
+                  {d.originalLine ?? ""}
+                </pre>
+              </Box>
+            ))}
+          </Box>
         </Box>
 
+        {/* FIXED */}
+        <Box className="diff-column">
+          <Box className="diff-header green">
+            PROPOSED FIX
+          </Box>
+          <Box className="code-block">
+            {currentFile.differences.map((d, index) => (
+              <Box
+                key={`${d.lineNumber}-${d.type}-fix-new-${index}`}
+                className={`code-line ${
+                  { ADDED:"added", MODIFIED:"modified" }[d.type] || ""
+                }`}
+              >
+                <Box className="line-number">
+                  {d.lineNumber}
+                </Box>
+                <pre className="line-code">
+                  {d.modifiedLine ?? ""}
+                </pre>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      </>
+    )}
+  </Box>
+        </Box>
       </Box>
 
       <Snackbar
@@ -703,7 +761,7 @@ const handleFixByRule = async (e, ruleId) => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-{fixLoading && (
+      {fixLoading && (
 
   <Box
     sx={{
