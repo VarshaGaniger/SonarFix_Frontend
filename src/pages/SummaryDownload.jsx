@@ -88,33 +88,38 @@ const fetchSummary = async () => {
 
   };
 
-  const handleReport = async () => {
+const handleReport = async () => {
+  try {
+    const report = await axios.get(`http://localhost:9090/api/fix/report/${scanId}`);
+    
+    // Use the fix-specific diff endpoint, not the preview endpoint
+    const diff = await axios.get(`http://localhost:9090/api/diff/project/${scanId}`);
 
-    try {
+    console.log("RAW diff response:", diff.data);
+    console.log("First item keys:", diff.data?.[0] ? Object.keys(diff.data[0]) : "empty");
 
-      const report = await axios.get(
-        `http://localhost:9090/api/fix/report/${scanId}`
-      );
+    // Normalize field name — backend uses lineDiffs, ReportPage expects diffLines
+    const normalizedDiffs = (diff.data || []).map(file => ({
+      relativePath: file.relativePath,
+      diffLines: (file.lineDiffs || file.diffLines || []).filter(
+        line => line.type !== "UNCHANGED"
+      )
+    })).filter(file => file.diffLines.length > 0);
 
-      const diff = await axios.get(
-        `http://localhost:9090/api/diff/project/${scanId}`
-      );
+    console.log("normalizedDiffs:", normalizedDiffs);
 
-      navigate(`/report/${scanId}`, {
-        state: {
-          summary: report.data,
-          diffs: diff.data,
-          scanId
-        }
-      });
+    navigate(`/report/${scanId}`, {
+      state: {
+        summary: report.data,
+        diffs: normalizedDiffs,
+        scanId
+      }
+    });
 
-    } catch (err) {
-
-      console.error("Failed to load report", err);
-
-    }
-
-  };
+  } catch (err) {
+    console.error("Failed to load report", err);
+  }
+};
 
   if (loading) {
 

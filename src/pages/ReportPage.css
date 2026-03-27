@@ -13,6 +13,11 @@ margin-bottom:20px;
 cursor:pointer;
 }
 
+.diff-line.unchanged {
+  color: var(--text-muted, #888);
+  background: transparent;
+}
+
 .report-container{
 background:white;
 padding:30px;

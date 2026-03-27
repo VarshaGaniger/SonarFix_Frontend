@@ -72,10 +72,10 @@ useEffect(() => {
 }
 
       // ================= FAILED =================
-      if (backendStatus === "FAILED" && !redirectedRef.current) {
-        redirectedRef.current = true;
+      if (backendStatus === "FAILED") {
+      
         clearInterval(intervalRef.current);
-        setTimeout(() => navigate("/dashboard"), 2000);
+       
       }
 
     } catch (err) {
